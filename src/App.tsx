@@ -5,6 +5,7 @@ import { Dashboard } from "./pages/dashboard"
 import { Chat } from "./pages/chat"
 import { Turmas } from "./pages/turmas"
 import { Progresso } from "./pages/progresso"
+import {AulaVideo} from "./pages/aulaVideo"
 
 export function App() {
   return (
@@ -16,6 +17,7 @@ export function App() {
       <Route path="/turmas" element={<Turmas />}/>
       <Route path="/progresso" element={<Progresso />}/>
       <Route path="/chat" element={<Chat />}/>
+      <Route path="/aula" element={<AulaVideo />}/>
     </Routes>
    </BrowserRouter>
   )
