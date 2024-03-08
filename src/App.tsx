@@ -5,6 +5,7 @@ import { Chat } from "./pages/chat"
 import { Disciplinas } from "./pages/dissciplinas"
 import { Progresso } from "./pages/progresso"
 import { Conteudos } from "./pages/conteudos"
+import { Aulas } from "./pages/aulas"
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
       <Route path="/home" element={<Home />}/>
       <Route path="/disciplinas" element={<Disciplinas />}/>
       <Route path="/disciplinas/matematica" element={<Conteudos />}/>
+      <Route path="/disciplinas/matematica/aula/1" element={<Aulas />}/>
       <Route path="/progresso" element={<Progresso />}/>
       <Route path="/chat" element={<Chat />}/>
     </Routes>

@@ -11,7 +11,7 @@ export function Disciplinas() {
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
-        <h1 className="text-blue-600 text-xl font-light mb-2">Turmas</h1>
+        <h1 className="text-blue-600 text-xl font-medium mb-2">Turmas</h1>
         <div className="flex flex-col bg-white p-6 rounded-xl justify-center items-center">
           <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2">
             <div className="col-span-1">

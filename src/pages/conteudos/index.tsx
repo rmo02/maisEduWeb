@@ -6,7 +6,7 @@ export function Conteudos() {
       <div className="flex flex-col w-full">
         <h1 className="text-blue-600 text-xl font-medium mb-2">Matemática</h1>
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
-          <a href="/">
+          <a href="/disciplinas/matematica/aula/1">
             <div className="w-full flex justify-between items-center bg-azul_azul_select rounded-lg h-10 cursor-pointer">
               <h1 className="ml-4 text-azul_claro-foreground font-medium text-lg">
                 Geometria
