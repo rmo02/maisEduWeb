@@ -18,7 +18,7 @@
     --amarelo: hsl(51, 84%, 57%);
     --cinza-escuro: hsl(210, 15%, 25%);
     --azul-muito-muito-claro-2: hsl(216, 100%, 97%);
-
+    --azul-select: hsl(225, 89%, 93%);
     --background: 216, 100%, 97%;
     --foreground: 222.2 84% 4.9%;
 
@@ -56,7 +56,7 @@
  
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
- 
+    --azul-select: hsl(225, 89%, 93%);
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
  

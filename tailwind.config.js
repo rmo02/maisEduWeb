@@ -27,6 +27,10 @@ module.exports = {
           DEFAULT: "hsl(236, 100%, 27%)",
           foreground: "hsl(236, 100%, 27%)",
         },
+        azul_azul_select: {
+          DEFAULT: "hsl(225, 89%, 93%)",
+          foreground: "hsl(225, 89%, 93%)",
+        },
         azul_escuro: {
           DEFAULT: "hsl(236, 100%, 39%)",
           foreground: "hsl(236, 100%, 39%)",
@@ -109,7 +113,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: 'Poppins, sans-serif'
+        sans: 'Quicksand, sans-serif'
       },
       borderRadius: {
         lg: "var(--radius)",

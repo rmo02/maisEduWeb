@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes} from "react-router-dom"
 import { Home } from "./pages/home"
 import { Navbar } from "./components/navbar"
-import { Dashboard } from "./pages/dashboard"
 import { Chat } from "./pages/chat"
 import { Disciplinas } from "./pages/dissciplinas"
 import { Progresso } from "./pages/progresso"
+import { Conteudos } from "./pages/conteudos"
 
 export function App() {
   return (
@@ -12,8 +12,8 @@ export function App() {
    <Navbar />
     <Routes>
       <Route path="/home" element={<Home />}/>
-      <Route path="/dashboard" element={<Dashboard />}/>
       <Route path="/disciplinas" element={<Disciplinas />}/>
+      <Route path="/disciplinas/matematica" element={<Conteudos />}/>
       <Route path="/progresso" element={<Progresso />}/>
       <Route path="/chat" element={<Chat />}/>
     </Routes>
