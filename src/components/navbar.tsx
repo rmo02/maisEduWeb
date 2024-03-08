@@ -10,14 +10,14 @@ import {
 
 export function Navbar() {
   return(
-    <div className="w-full h-14 p-2 px-52 bg-blue-600 flex justify-between items-center">
+    <div className="w-full h-14 py-3 px-52 bg-blue-600 flex justify-between items-center mb-2">
       <div>
         <a href="/home"><img className="w-15 h-6" src={Logo} alt="" /></a>
       </div>
       <div>
         <ul className="flex text-slate-100 ">
           <li className="w-full h-full px-1"><a href="/dashboard">Dashboard</a></li>
-          <li className="w-full h-full px-1"><a href="/turmas">Turmas</a></li>
+          <li className="w-full h-full px-1"><a href="/disciplinas">Turmas</a></li>
           <li className="w-full h-full px-1"><a href="/progresso">Progresso</a></li>
           <li className="w-full h-full px-1"><a href="/chat">Chat</a></li>
         </ul>

@@ -1,25 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --gray-100: #E1E1E6;
-    --gray-400: #8D8D99;
-    --gray-500: #7C7C8A;
-    --gray-600: #323238;
-    --gray-700: #29292E;
-    --gray-800: #202024;
-    --gray-900: #121214;
-  
-    --green-300: #00B37E;
-    --green-500: #00875F;
-    --green-700: #015F43;
-  
-    --red-300: #F75A68;
-    --red-500: #AB222E;
+    --azul-mais-escuro: hsl(236, 100%, 27%);
+    --azul-escuro: hsl(236, 100%, 39%);
+    --azul: hsl(236, 100%, 49%);
+    --azul-mais-claro: hsl(236, 100%, 57%);
+    --azul-claro: hsl(236, 100%, 63%);
+    --azul-celeste: hsl(226, 79%, 53%);
+    --azul-mais-claro-2: hsl(226, 51%, 68%);
+    --azul-claro-2: hsl(226, 67%, 76%);
+    --azul-muito-claro: hsl(226, 33%, 90%);
+    --azul-muito-muito-claro: hsl(226, 47%, 97%);
+    --azul-verde: hsl(180, 100%, 36%);
+    --amarelo: hsl(51, 84%, 57%);
+    --cinza-escuro: hsl(210, 15%, 25%);
+    --azul-muito-muito-claro-2: hsl(216, 100%, 97%);
 
-    --background: 0 0% 100%;
+    --background: 216, 100%, 97%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -86,6 +86,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-azul_muito_muito_claro text-foreground;
   }
 }
