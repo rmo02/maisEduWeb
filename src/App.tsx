@@ -3,7 +3,7 @@ import { Home } from "./pages/home"
 import { Navbar } from "./components/navbar"
 import { Dashboard } from "./pages/dashboard"
 import { Chat } from "./pages/chat"
-import { Turmas } from "./pages/turmas"
+import { Disciplinas } from "./pages/dissciplinas"
 import { Progresso } from "./pages/progresso"
 
 export function App() {
@@ -13,7 +13,7 @@ export function App() {
     <Routes>
       <Route path="/home" element={<Home />}/>
       <Route path="/dashboard" element={<Dashboard />}/>
-      <Route path="/turmas" element={<Turmas />}/>
+      <Route path="/disciplinas" element={<Disciplinas />}/>
       <Route path="/progresso" element={<Progresso />}/>
       <Route path="/chat" element={<Chat />}/>
     </Routes>

@@ -23,6 +23,62 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        azul_mais_escuro: {
+          DEFAULT: "hsl(236, 100%, 27%)",
+          foreground: "hsl(236, 100%, 27%)",
+        },
+        azul_escuro: {
+          DEFAULT: "hsl(236, 100%, 39%)",
+          foreground: "hsl(236, 100%, 39%)",
+        },
+        azul: {
+          DEFAULT: "hsl(236, 100%, 49%)",
+          foreground: "hsl(236, 100%, 49%)",
+        },
+        azul_mais_claro: {
+          DEFAULT: "hsl(236, 100%, 57%)",
+          foreground: "hsl(236, 100%, 57%)",
+        },
+        azul_claro: {
+          DEFAULT: "hsl(236, 100%, 63%)",
+          foreground: "hsl(236, 100%, 63%)",
+        },
+        azul_celeste: {
+          DEFAULT: "hsl(226, 79%, 53%)",
+          foreground: "hsl(226, 79%, 53%)",
+        },
+        azul_mais_claro_2: {
+          DEFAULT: "hsl(226, 51%, 68%)",
+          foreground: "hsl(226, 51%, 68%)",
+        },
+        azul_claro_2: {
+          DEFAULT: "hsl(226, 67%, 76%)",
+          foreground: "hsl(226, 67%, 76%)",
+        },
+        azul_muito_claro: {
+          DEFAULT: "hsl(226, 33%, 90%)",
+          foreground: "hsl(226, 33%, 90%)",
+        },
+        azul_muito_muito_claro: {
+          DEFAULT: "hsl(226, 47%, 97%)",
+          foreground: "hsl(226, 47%, 97%)",
+        },
+        azul_verde: {
+          DEFAULT: "hsl(180, 100%, 36%)",
+          foreground: "hsl(180, 100%, 36%)",
+        },
+        amarelo: {
+          DEFAULT: "hsl(51, 84%, 57%)",
+          foreground: "hsl(51, 84%, 57%)",
+        },
+        cinza_escuro: {
+          DEFAULT: "hsl(210, 15%, 25%)",
+          foreground: "hsl(210, 15%, 25%)",
+        },
+        azul_muito_muito_claro_2: {
+          DEFAULT: "hsl(216, 100%, 97%)",
+          foreground: "hsl(216, 100%, 97%)",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -51,6 +107,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      fontFamily: {
+        sans: 'Poppins, sans-serif'
       },
       borderRadius: {
         lg: "var(--radius)",
