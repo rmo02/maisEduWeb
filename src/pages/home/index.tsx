@@ -12,12 +12,12 @@ export function Home() {
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
-        <h1 className="text-zinc-700 text-2xl">Olá <span className="text-blue-500">Vinicius</span> o que vamos estudar hoje?</h1>
+        <h1 className="text-zinc-700 text-2xl">Olá <span className="text-blue-500 font-medium">Vinicius</span> o que vamos estudar hoje?</h1>
 
         <div className="w-full h-full flex gap-6 justify-between py-2">
           <div className="w-[60%] flex flex-col pr-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-blue-600 text-xl font-light">Turmas</h1>
+              <h1 className="text-blue-600 text-xl font-medium">Turmas</h1>
               <span className="text-zinc-600 text-sm underline cursor-pointer">Todas as turmas</span>
             </div>
             
@@ -79,7 +79,7 @@ export function Home() {
 
         <div className="w-full h-full flex justify-between gap-8 mt-4">
           <div className="w-[40%]">
-            <h1 className="text-blue-600 font-light">Últimas aulas</h1>
+            <h1 className="text-blue-600 font-medium text-xl">Últimas aulas</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5">
               <div className="col-span-1">
                 <img src={Fisica} />
@@ -97,7 +97,7 @@ export function Home() {
           </div>
           <div className="flex flex-col bg-white w-full sm:w-1/2 md:w-3/5 lg:w-3/5 rounded-xl p-4 shadow-md shadow-[#4264eb86]">
             <div className="flex justify-between items-center">
-              <h1 className="text-[#00B7B7] font-light text-lg">Chat</h1>
+              <h1 className="text-[#00B7B7] font-medium text-xl">Chat</h1>
               <span className="text-zinc-600 text-sm underline cursor-pointer">Chat completo</span>
             </div>
             <div className="flex gap-4 mt-4 border-b border-slate-200">

@@ -1,58 +1,119 @@
 import ctl from "@netlify/classnames-template-literals";
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
-// const playVideo = ({}) => {
 export function VideoPlayer() {
-  const videoOverlayStyle = ctl(`
-  relative
+  const videoContainerStyle = ctl(`
+    relative
+    w-full
+    max-w-[967px]
+    mx-auto
+  `);
+
+  const videoStyle = ctl(`
+    w-full
+  `);
+
+  const videoControlsStyle = ctl(`
+    absolute
+    bottom-0
+    left-0
+    right-0
+    flex
+    justify-between
+    px-4
+    pb-4
+    text-sm
+    text-white
+    w-full
   `);
 
   const progressBarStyle = ctl(`
     bg-white
     h-[4px]
-    w-[98%]
-    mx-auto
-    mb-[18px]
+    w-full
+    absolute
+    bottom-6
+    left-0
+    mb-4
   `);
 
   const progressBarInnerStyle = ctl(`
-    bg-black
-    w-[50%]
+    bg-blue-600
     h-full
-  `);
+    `);
+    // progress-bar-inner
 
-  const videoStyle = ctl(`
-  w-full
-  max-w-[967px]
-  mx-auto
-  my-8
-  `);
-
-  const [isLoadind, setIsLoadind] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const playVideo = () => {
     if (isPlaying) {
-      // videoRef.current.pause();
+      videoRef.current?.pause();
     } else {
-      // videoRef.current.play();
+      videoRef.current?.play();
     }
 
     setIsPlaying((currentPlayStatus) => !currentPlayStatus);
   };
 
+  const toggleFullScreen = () => {
+    if (videoRef.current) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        videoRef.current.requestFullscreen();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
+      videoRef.current.addEventListener("canplaythrough", handleCanPlayThrough);
+      videoRef.current.addEventListener("ended", handleVideoEnded);
+
+      return () => {
+        videoRef.current?.removeEventListener("timeupdate", handleTimeUpdate);
+        videoRef.current?.removeEventListener(
+          "canplaythrough",
+          handleCanPlayThrough
+        );
+        videoRef.current?.removeEventListener("ended", handleVideoEnded);
+      };
+    }
+  }, []);
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(videoRef.current?.currentTime || 0);
+  };
+
+  const handleCanPlayThrough = () => {
+    setVideoDuration(videoRef.current?.duration || 0);
+    setIsLoading(false);
+  };
+
+  const handleVideoEnded = () => {
+    setIsPlaying(false);
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes < 10 ? "0" + minutes : minutes}:${
+      seconds < 10 ? "0" + seconds : seconds
+    }`;
+  };
+
   return (
-    <div className={videoOverlayStyle}>
+    <div className={videoContainerStyle}>
       <video
         className={videoStyle}
         ref={videoRef}
-        onCanPlayThrough={() => {
-          // alert(videoRef.current.duration);
-          setIsLoadind(false);
-        }}
-        controls
-        autoPlay
+        onWaiting={() => setIsLoading(true)}
       >
         <source
           src="https://docs.material-tailwind.com/demo.mp4"
@@ -60,18 +121,29 @@ export function VideoPlayer() {
         />
       </video>
 
-      {/* Video Overlay */}
-      <div className="absolute left-0 right-0 top-0 b-black w-full h-full flex flex-col justify-end">
-        {/* Progress bar */}
-        <div>{isLoadind ? "calm down and grab a cup of coffee" : ""}</div>
-        <div className={progressBarStyle}>
-          <div className={progressBarInnerStyle}></div>
-        </div>
+      {/* Progress bar */}
 
-        {/* Video  controls */}
-        <div>
-          <button onClick={playVideo}>{isPlaying ? "Pause" : "Play"}</button>
+      {/* Video controls */}
+      <div className={videoControlsStyle}>
+        <div className={progressBarStyle}>
+          <div
+            className={progressBarInnerStyle}
+            style={{
+              // animationPlayState: isPlaying ? "running" : "paused",
+              // animationDuration: isPlaying
+              //   ? `${videoRef.current?.duration}s`
+              //   : "0s",
+              width: isLoading
+                ? "0%"
+                : `${(currentTime / videoDuration) * 100}%`,
+            }}
+          />
         </div>
+        <button onClick={playVideo}>{isPlaying ? "Pause" : "Play"}</button>
+        <p>
+          {formatTime(currentTime)}/{formatTime(videoDuration)}
+        </p>
+        <button onClick={toggleFullScreen}>Fullscreen</button>
       </div>
     </div>
   );
