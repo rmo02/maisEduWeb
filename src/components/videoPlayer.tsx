@@ -1,5 +1,6 @@
 import ctl from "@netlify/classnames-template-literals";
 import React, { useRef, useState, useEffect } from "react";
+import { MdFullscreenExit, MdPlayArrow, MdPause } from "react-icons/md";
 
 export function VideoPlayer() {
   const videoContainerStyle = ctl(`
@@ -22,9 +23,11 @@ export function VideoPlayer() {
     justify-between
     px-4
     pb-4
-    text-sm
     text-white
     w-full
+	h-[32px]
+	bg-black
+	bg-opacity-25
   `);
 
   const progressBarStyle = ctl(`
@@ -32,16 +35,17 @@ export function VideoPlayer() {
     h-[4px]
     w-full
     absolute
-    bottom-6
+    bottom-2
     left-0
-    mb-4
+    mb-6
+	bg-opacity-25
   `);
 
   const progressBarInnerStyle = ctl(`
     bg-blue-600
     h-full
     `);
-    // progress-bar-inner
+  // progress-bar-inner
 
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -139,11 +143,19 @@ export function VideoPlayer() {
             }}
           />
         </div>
-        <button onClick={playVideo}>{isPlaying ? "Pause" : "Play"}</button>
+        <button onClick={playVideo}>
+          {isPlaying ? (
+            <MdPause className="w-[25px] h-[25px]" />
+          ) : (
+            <MdPlayArrow className="w-[25px] h-[25px]" />
+          )}
+        </button>
         <p>
           {formatTime(currentTime)}/{formatTime(videoDuration)}
         </p>
-        <button onClick={toggleFullScreen}>Fullscreen</button>
+        <button onClick={toggleFullScreen}>
+          <MdFullscreenExit className="w-[25px] h-[25px]" />
+        </button>
       </div>
     </div>
   );
