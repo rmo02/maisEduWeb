@@ -6,9 +6,73 @@ import Ingles from "../../assets/ingles.png";
 import Matematica from "../../assets/matematica.png";
 import Portugues from "../../assets/portugues.png";
 
+
 import { Label } from "@/components/ui/label";
+import api from "@/api";
+import { useState } from "react";
 
 export function Home() {
+  const [ultimasAulas, setUltimasAulas] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
+  const [lembretes, setLembretes] = useState([]);
+  const [disciplinas, setDisciplinas] = useState([]);
+
+  const getMaterias = async () => {
+    try {
+      const res = await api.get(`/disciplinasAluno/idDoAluno`)
+      setDisciplinas(res.data["disciplinas"])
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
+  const getVistoPorUltimo = async () => {
+    try {
+      const res = await api.get(`/ultimasAulas/idDoAluno`);
+      setUltimasAulas(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getAulasFavoritadas = async () => {
+    try {
+      const res = await api.get(`/favoritos/idDoAluno`);
+      setFavoritos(res.data["favoritos"])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getLembrete = async () => {
+    try {
+      const res = await api.get(`/lembretesByAluno/idDoAluno`);
+      setLembretes(res.data["lembretes"]);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const criarLembrete = async () => {
+    try {
+      const res = api.post('/lembretes', {})
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
+  const delLembretes = async () => {
+    try {
+      const res = await api.delete(`/lembretes/idDoLembrete`);
+      console.log('deu certo', res)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
