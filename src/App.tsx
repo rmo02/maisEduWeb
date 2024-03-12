@@ -6,6 +6,7 @@ import { Disciplinas } from "./pages/dissciplinas"
 import { Progresso } from "./pages/progresso"
 import { Conteudos } from "./pages/conteudos"
 import { Aulas } from "./pages/aulas"
+import { VideoPlayer } from "./components/videoPlayer"
 
 export function App() {
   return (
@@ -18,6 +19,8 @@ export function App() {
       <Route path="/disciplinas/matematica/aula/1" element={<Aulas />}/>
       <Route path="/progresso" element={<Progresso />}/>
       <Route path="/chat" element={<Chat />}/>
+      <Route path="/video" element={<VideoPlayer />}/>
+
     </Routes>
    </BrowserRouter>
   )
