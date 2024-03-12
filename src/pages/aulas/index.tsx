@@ -1,6 +1,20 @@
+import api from "@/api";
 import { ChevronRight } from "lucide-react"
+import { useState } from "react";
 
 export function Aulas() {
+  const [disciplinas, setDisciplinas] = useState([]);
+
+  const getMaterias = async () => {
+    try {
+      const res = await api.get(`/disciplinasAluno/idDoAluno`)
+      setDisciplinas(res.data["disciplinas"])
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       {/* Side content */}

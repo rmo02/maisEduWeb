@@ -9,9 +9,11 @@ import Portugues from "../../assets/portugues.png";
 
 import { Label } from "@/components/ui/label";
 import api from "@/api";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export function Home() {
+  const { user } = useContext(AuthContext);
   const [ultimasAulas, setUltimasAulas] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [lembretes, setLembretes] = useState([]);
@@ -19,7 +21,7 @@ export function Home() {
 
   const getMaterias = async () => {
     try {
-      const res = await api.get(`/disciplinasAluno/idDoAluno`)
+      const res = await api.get(`/disciplinasAluno/${user?.id}`)
       setDisciplinas(res.data["disciplinas"])
     } catch (error) {
       console.log(error)
@@ -29,7 +31,7 @@ export function Home() {
 
   const getVistoPorUltimo = async () => {
     try {
-      const res = await api.get(`/ultimasAulas/idDoAluno`);
+      const res = await api.get(`/ultimasAulas/${user?.id}`);
       setUltimasAulas(res.data)
     } catch (error) {
       console.log(error)
@@ -38,7 +40,7 @@ export function Home() {
 
   const getAulasFavoritadas = async () => {
     try {
-      const res = await api.get(`/favoritos/idDoAluno`);
+      const res = await api.get(`/favoritos/${user?.id}`);
       setFavoritos(res.data["favoritos"])
     } catch (error) {
       console.log(error)
@@ -47,7 +49,7 @@ export function Home() {
 
   const getLembrete = async () => {
     try {
-      const res = await api.get(`/lembretesByAluno/idDoAluno`);
+      const res = await api.get(`/lembretesByAluno/${user?.id}`);
       setLembretes(res.data["lembretes"]);
     } catch (error) {
       throw error;
