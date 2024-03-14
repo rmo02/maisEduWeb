@@ -41,7 +41,8 @@ interface Turma {
   updated_at: string;
 }
 
-export function EditarLembrete({ eventId }: eventProp) {
+export function EditarLembrete({ meeting }: { meeting: any }) {
+  // export function EditarLembrete({ eventId }: eventProp) {
   //   const { user } = useContext(AuthContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [titleEvent, setTitleEvent] = useState("");
@@ -87,7 +88,8 @@ export function EditarLembrete({ eventId }: eventProp) {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await api.get(`/lembretes/${eventId}`);
+      const response = await api.get(`/lembretes/${meeting.id}`);
+      // const response = await api.get(`/lembretes/${eventId}`);
       setTitleEvent(response.data.lembrete.title);
       setDescriptionEvent(response.data.lembrete.description);
       setInicioDateTime(response.data.lembrete.start.slice(0, 5));
@@ -98,11 +100,13 @@ export function EditarLembrete({ eventId }: eventProp) {
       setDataMasked(response.data.lembrete.data_masked);
     };
     getData();
-  }, [eventId]);
+  }, [meeting.id]);
+  // }, [eventId]);
 
   async function enviarLembrete() {
     try {
-      await api.put(`/lembretes/${eventId}`, {
+      await api.put(`/lembretes/${meeting.id}`, {
+        // await api.put(`/lembretes/${eventId}`, {
         title: titleEvent,
         description: descriptionEvent,
         data: `${dataMasked} 00:00`,
@@ -124,7 +128,8 @@ export function EditarLembrete({ eventId }: eventProp) {
     event.preventDefault(); // Evita o comportamento padrão do formulário
 
     try {
-      const res = await api.delete(`/lembretes/${eventId}`);
+      const res = await api.delete(`/lembretes/${meeting.id}`);
+      // const res = await api.delete(`/lembretes/${eventId}`);
       if (res.status !== 204) {
         alert(res.status);
       }
@@ -157,12 +162,26 @@ export function EditarLembrete({ eventId }: eventProp) {
   }
 
   return (
-    <div>
-      <button
-        onClick={openModal}
-        className="flex items-center justify-center  text-[#4263EB]"
-      >
-        <EditIcon className="text-[#748FFC] " />
+    <div className="w-full">
+      <button onClick={openModal} className="w-full">
+        <div className="w-full">
+          <div className="flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] h-24 px-4">
+            <p className="text-[#748FFC] text-[18px] font-bold mb-2">
+              {meeting.title}
+            </p>
+            <p className="text-foreground text-[18px] font-bold mb-2">
+              {meeting.description}
+            </p>
+            <div className="flex flex-row items-center justify-between">
+              <p className="text-[#748FFC] text-[14px] font-medium ">
+                {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
+              </p>
+              {/* <p className="text-azul_verde text-[14px] font-roboto ">
+                {meeting.turma.name}
+              </p> */}
+            </div>
+          </div>
+        </div>
       </button>
       <Modal
         isOpen={modalIsOpen}

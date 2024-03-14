@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.12",
     "@netlify/classnames-template-literals": "^1.0.3",

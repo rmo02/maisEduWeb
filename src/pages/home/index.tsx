@@ -130,7 +130,7 @@ export function Home() {
         </div>
       </div>
 
-      <div className="w-[25%] flex flex-col bg-white rounded-xl">
+      <div className="w-[30%]">
         <Calendario />
       </div>
     </div>

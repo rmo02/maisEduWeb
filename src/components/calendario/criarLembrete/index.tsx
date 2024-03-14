@@ -1,8 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import AddIcon from "@mui/icons-material/Add";
 import { api } from "../../../api/app";
 import { Button } from "../../ui/button";
+import { Dialog } from "../../ui/dialog";
 
 interface Disciplina {
   bk_color: string;
@@ -38,10 +39,10 @@ interface Turma {
 }
 
 export function CriarLembrete() {
-  //   const [disciplinas, setDisciplinas] = useState<String>("");
   const [disciplinas, setDisciplinas] = useState<Record<string, Disciplina>>(
     {}
   );
+
   const [series, setSeries] = useState<Record<string, Serie>>({});
   const [turmas, setTurmas] = useState<Record<string, Turma>>({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -82,7 +83,7 @@ export function CriarLembrete() {
   }, []);
 
   async function enviarLembrete(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); // Evita o comportamento padrão do formulário
+    event.preventDefault();
 
     try {
       const res = await api.post("/lembretes", {
@@ -91,10 +92,14 @@ export function CriarLembrete() {
         data: `${dataEvent} 00:00`,
         start: `${dataEvent} ${inicioDateTime}`,
         end: `${dataEvent} ${fimDateTime}`,
+        // id_aluno: "",
         id_professor: "a618b405-0eaa-4992-a3ae-21dafb816646",
-        id_disciplina: idDisc,
-        id_serie: idSerie,
-        id_turma: idTurma,
+        // id_disciplina: idDisc,
+        id_disciplina: "370cfa26-fd05-4c90-92c1-e06cfeda3669",
+        // id_serie: idSerie,
+        id_serie: "da06838a-f8af-4bbd-b9c4-5ad4de6d5be2",
+        // id_turma: idTurma,
+        id_turma: "6e879d7f-6c60-4dc1-aade-d6d9197ec9bd",
       });
       if (res.status === 201) {
         console.log(res.status);
@@ -121,10 +126,9 @@ export function CriarLembrete() {
     setDataEvent("");
     setInicioDateTime("");
     setFimDateTime("");
-    setIdDisc("");
-    setIdSerie("");
-    setIdTurma("");
-    alert("Lembrete cancelado!");
+    // setIdDisc("");
+    // setIdSerie("");
+    // setIdTurma("");
     closeModal();
   }
 
@@ -132,160 +136,87 @@ export function CriarLembrete() {
     <div>
       <Button
         onClick={openModal}
-        className="flex items-center justify-center mt-4 rounded-lg bg-[#FFFFFF] w-full h-12 text-[#4263EB]"
-        variant={"ghost"}
+        className="flex items-center justify-center mt-3 rounded-lg bg-azul_verde hover:opacity-70 w-full h-12 text-white"
+        variant={null}
       >
-        <AddIcon className="font-bold" />
+        Novo Lembrete
       </Button>
       <Modal
         isOpen={modalIsOpen}
         ariaHideApp={false}
         onRequestClose={closeModal}
-        overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
-        className="flex flex-col bg-white w-1/3 h-3/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
+        overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black_rgba"
+        className="flex flex-col bg-background w-1/3 h-3/5 rounded-lg p-1 px-8 text-blue-600 scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
-        <form onSubmit={enviarLembrete}>
+        <form onSubmit={enviarLembrete} className="flex flex-col space-y-6">
           <div className="flex items-center justify-center">
             <p className="text-[25px] font-semibold">Novo lembrete</p>
           </div>
-          <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
+          <div className="bg-popover rounded-lg text-blue-600 py-4">
             <input
               required
               placeholder="Título"
               onChange={(e) => {
                 setTitleEvent(e.target.value);
               }}
-              className="w-fit placeholder-dark-purple outline-none text-[25px]"
+              className="w-full placeholder-blue-600 outline-none text-[25px]"
             />
           </div>
-          <div className="flex flex-row">
-            <div className="flex flex-col w-1/2">
-              <div className="flex flex-col text-dark-purple py-4">
+          <div className="w-full flex flex-col w-full">
+            <div className="w-full flex flex-row justify-between">
+              <div className="w-1/2 text-blue-600 py-4">
                 <textarea
                   required
                   placeholder="Descrição"
                   onChange={(e) => {
                     setDescriptionEvent(e.target.value);
                   }}
-                  className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
+                  className="w-fit h-fit placeholder-blue-600 outline-none text-[20px] scrollbar-thin resize-none"
                 />
               </div>
 
-              <div className="flex flex-col text-dark-purple py-4">
-                <p className="text-[20px]">Data do evento:</p>
+              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                <p className="text-[20px]">Data</p>
                 <input
                   required
                   type="date"
                   onChange={(e) => {
                     setDataEvent(e.target.value);
                   }}
-                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
                 />
               </div>
-
-              <div className="flex flex-col text-dark-purple py-4">
-                <p className="text-[20px]">Início do evento:</p>
+            </div>
+            <div className="w-full flex flex-row justify-between">
+              <div className="w-1/2 flex flex-col text-blue-600 py-4">
+                <p className="text-[20px]">Início</p>
                 <input
                   required
                   type="time"
                   onChange={(e) => {
                     setInicioDateTime(e.target.value);
                   }}
-                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
                 />
               </div>
 
-              <div className="flex flex-col text-dark-purple py-4">
-                <p className="text-[20px]">Fim do evento:</p>
+              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                <p className="text-[20px]">Fim</p>
                 <input
                   required
                   type="time"
                   onChange={(e) => {
                     setFimDateTime(e.target.value);
                   }}
-                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
                 />
               </div>
             </div>
-
-            <div>
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Disciplina</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  onChange={(e) => {
-                    setIdDisc(e.target.value);
-                  }}
-                  id="disciplina"
-                  required
-                >
-                  <option value="">Selecione uma disciplina:</option>
-                  {Object.entries<Disciplina>(disciplinas).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return (
-                        <option key={"disciplina" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
-
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Série</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  onChange={(e) => {
-                    setIdSerie(e.target.value);
-                  }}
-                  name="serie"
-                  required
-                >
-                  <option value="">Selecione uma série:</option>
-                  {Object.entries<Serie>(series).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return (
-                        <option key={"serie" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
-
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Turma</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  onChange={(e) => {
-                    setIdTurma(e.target.value);
-                  }}
-                  name="turma"
-                  required
-                >
-                  <option value="">Selecione uma turma:</option>
-                  {Object.entries<Turma>(turmas).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return (
-                        <option key={"turma" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
-            </div>
           </div>
-          <div className="flex flex-row items-center justify-end my-4 px-4 w-full">
+          <div className="flex flex-row items-center justify-end w-full">
             <button
               onClick={clearLembrete}
-              className="bg-[#EDF2FF] rounded-lg text-black w-1/5 h-[40px] ml-4"
+              className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
             >
               Cancelar
             </button>
@@ -294,21 +225,22 @@ export function CriarLembrete() {
             descriptionEvent.length === 0 ||
             dataEvent.length === 0 ||
             inicioDateTime.length === 0 ||
-            fimDateTime.length === 0 ||
-            idDisc.length === 0 ||
-            idSerie.length === 0 ||
-            idTurma.length === 0 ? (
+            fimDateTime.length === 0 ? (
+              // ||
+              // idDisc.length === 0 ||
+              // idSerie.length === 0 ||
+              // idTurma.length === 0
               <button
                 type="submit"
                 disabled={true}
-                className="bg-black rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
+                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
               >
                 Salvar
               </button>
             ) : (
               <button
                 type="submit"
-                className="bg-black rounded-lg text-white w-1/5 h-[40px] ml-4"
+                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4"
               >
                 Salvar
               </button>
@@ -316,6 +248,7 @@ export function CriarLembrete() {
           </div>
         </form>
       </Modal>
+      {/* <Dialog></Dialog> */}
     </div>
   );
 }

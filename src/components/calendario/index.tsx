@@ -19,7 +19,6 @@ import { useState, useEffect } from "react";
 import { CriarLembrete } from "./criarLembrete/index";
 import { api } from "../../api/app";
 import { EditarLembrete } from "./editarLembrete";
-// import { EditarLembrete } from "../Modals/Lembretes/EditarLembrete";
 // import { AuthContext } from "../../context/auth";
 
 function classNames(...classes: (string | boolean)[]) {
@@ -89,34 +88,34 @@ export function Calendario() {
 
   return (
     <div className="w-full">
+      <div className="w-full flex justify-between">
+        <p className="text-blue-600 text-lg font-bold">Calendário</p>
+        <p className="text-cinza_escura text-lg font-medium">Anotações</p>
+      </div>
       <div className="flex flex-col">
-        <div className="py-4 px-6 bg-blue-600 rounded-lg">
+        <div className="py-4 px-4 bg-blue-600 rounded-lg h-1/2">
           <div className="flex items-center justify-between mt-1">
-            <div>
-              <h2 className="font-semibold text-[#F8F9FA] text-base">
-                {format(firstDayCurrentMonth, "MMMM / yyyy", {
-                  locale: ptBR,
-                }).toUpperCase()}
-              </h2>
-            </div>
-            <div className="flex flex-row">
-              <button
-                type="button"
-                onClick={previousMonth}
-                className="flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-[#18C4B3]"
-              >
-                <ChevronLeftIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={nextMonth}
-                type="button"
-                className="ml-2 flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-[#18C4B3]"
-              >
-                <ChevronRightIcon className="w-5 h-5" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={previousMonth}
+              className="flex flex-none items-center justify-center text-[#F8F9FA] hover:text-azul_verde"
+            >
+              <ChevronLeftIcon className="w-5 h-5" />
+            </button>
+            <h2 className="font-semibold text-[#F8F9FA] text-base">
+              {format(firstDayCurrentMonth, "MMMM", {
+                locale: ptBR,
+              }).toUpperCase()}
+            </h2>
+            <button
+              onClick={nextMonth}
+              type="button"
+              className="flex flex-none items-center justify-center text-[#F8F9FA] hover:text-azul_verde"
+            >
+              <ChevronRightIcon className="w-5 h-5" />
+            </button>
           </div>
-          <div className="grid grid-cols-7 mt-2 leading-6 text-center text-[#EDF2FF] opacity-70 text-[12px]">
+          <div className="grid grid-cols-7 mt-2 leading-6 text-center text-[#EDF2FF] text-[12px]">
             <p>DOM</p>
             <p>SEG</p>
             <p>TER</p>
@@ -131,7 +130,7 @@ export function Calendario() {
                 key={day.toString()}
                 className={classNames(
                   dayIdx == 0 && colStartClasses[getDay(day)],
-                  "py-1 relative"
+                  "py-0.5 relative"
                 )}
               >
                 <button
@@ -141,7 +140,7 @@ export function Calendario() {
                     isEqual(day, selectedDay) && "text-white",
                     !isEqual(day, selectedDay) &&
                       isToday(day) &&
-                      "text-[#02C4B2] font-bold",
+                      "text-[#FFFFFF] font-bold bg-[#92B2FB]",
                     !isEqual(day, selectedDay) &&
                       !isToday(day) &&
                       isSameMonth(day, firstDayCurrentMonth) &&
@@ -150,10 +149,12 @@ export function Calendario() {
                       !isToday(day) &&
                       !isSameMonth(day, firstDayCurrentMonth) &&
                       "text-gray-400",
-                    isEqual(day, selectedDay) && isToday(day) && "bg-[#02C4B2]",
+                    isEqual(day, selectedDay) &&
+                      isToday(day) &&
+                      "bg-azul_verde",
                     isEqual(day, selectedDay) &&
                       !isToday(day) &&
-                      "bg-[#02C4B2]",
+                      "bg-azul_verde",
                     !isEqual(day, selectedDay) && "hover:bg-[#748FFC]",
                     (isEqual(day, selectedDay) || isToday(day)) &&
                       "font-semibold",
@@ -183,68 +184,62 @@ export function Calendario() {
             <CriarLembrete />
           </div>
         </div>
-        <section>
-          <ol>
-            {selectedDayMeetings.length > 0 ? (
-              selectedDayMeetings.map((meeting: any) =>
-                meeting.id_professor ===
-                  "a618b405-0eaa-4992-a3ae-21dafb816646" &&
-                meeting.id_aluno === null ? (
-                  <Meeting meeting={meeting} key={meeting.id} />
-                ) : (
-                  <div key={meeting.id}>
-                    <p>Sem lembretes</p>
-                  </div>
+        <section className="w-full h-[30vh] mt-3">
+          <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb">
+            {/* <div className="overflow-y-auto h-full"> */}
+            <ol className="w-full">
+              {selectedDayMeetings.length > 0 ? (
+                selectedDayMeetings.map(
+                  (meeting: any) =>
+                    meeting.id_professor ===
+                      "a618b405-0eaa-4992-a3ae-21dafb816646" &&
+                    meeting.id_aluno === null && (
+                      <EditarLembrete meeting={meeting} key={meeting.id} />
+                      // <Meeting meeting={meeting} key={meeting.id} />
+                    )
+                  // : (
+                  //   <div key={meeting.id}>
+                  //     <p>Sem lembretes</p>
+                  //   </div>
+                  // )
                 )
-              )
-            ) : (
-              <div>
-                <p>Sem lembretes</p>
-              </div>
-            )}
-          </ol>
+              ) : (
+                <div className="w-full flex items-center justify-center mt-3">
+                  <p>Sem lembretes</p>
+                </div>
+              )}
+            </ol>
+          </div>
         </section>
       </div>
     </div>
   );
 }
-function Meeting({ meeting }: { meeting: any }) {
-  return (
-    <div>
-      <div className="w-full">
-        <div className="flex flex-col justify-center mt-4 rounded-lg bg-[#FFFFFF] h-24 px-4">
-          <div className="flex flex-row justify-between">
-            <div>
-              <p className="text-[#748FFC] text-[18px] font-bold mb-2">
-                {meeting.title}
-              </p>
-            </div>
-            <div>
-              <EditarLembrete eventId={meeting.id} />
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <p className="text-[#748FFC] text-[18px] font-bold mb-2">
-              {meeting.description}
-            </p>
-          </div>
-          <div className="flex flex-row justify-between">
-            <div>
-              <p className="text-[#748FFC] text-[14px] font-medium ">
-                {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
-              </p>
-            </div>
-            <div>
-              <p className="text-[#02C4B2] text-[14px] font-roboto ">
-                {meeting.turma.name}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+// function Meeting({ meeting }: { meeting: any }) {
+//   return (
+//     <div className="w-full">
+//       <div className="flex flex-col justify-center mt-4 rounded-lg bg-[#FFFFFF] h-24 px-4">
+//         <p className="text-[#748FFC] text-[18px] font-bold mb-2">
+//           {meeting.title}
+//         </p>
+//         {/* <div>
+//               <EditarLembrete eventId={meeting.id} />
+//             </div> */}
+//         <p className="text-[#748FFC] text-[18px] font-bold mb-2">
+//           {meeting.description}
+//         </p>
+//         <div className="flex flex-row justify-between">
+//           <p className="text-[#748FFC] text-[14px] font-medium ">
+//             {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
+//           </p>
+//           <p className="text-azul_verde text-[14px] font-roboto ">
+//             {meeting.turma.name}
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 let colStartClasses = [
   "",

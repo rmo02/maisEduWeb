@@ -18,6 +18,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        black_rgba: "rgba(0, 0, 0, 0.54)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -113,7 +114,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: 'Quicksand, sans-serif'
+        sans: "Quicksand, sans-serif",
       },
       borderRadius: {
         lg: "var(--radius)",
