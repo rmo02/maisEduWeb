@@ -17,7 +17,7 @@ import {
 import { ptBR } from "date-fns/locale";
 import { useState, useEffect } from "react";
 import { CriarLembrete } from "./criarLembrete/index";
-import { api } from "../../api/app";
+import api from "@/api";
 import { EditarLembrete } from "./editarLembrete";
 // import { AuthContext } from "../../context/auth";
 
@@ -185,9 +185,9 @@ export function Calendario() {
           </div>
         </div>
         <section className="w-full h-[30vh] mt-3">
-          <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb">
+          <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb">
             {/* <div className="overflow-y-auto h-full"> */}
-            <ol className="w-full">
+            <ol className="w-full flex flex-col">
               {selectedDayMeetings.length > 0 ? (
                 selectedDayMeetings.map(
                   (meeting: any) =>

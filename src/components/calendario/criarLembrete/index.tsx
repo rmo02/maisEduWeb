@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import AddIcon from "@mui/icons-material/Add";
-import { api } from "../../../api/app";
+import api from "@/api";
 import { Button } from "../../ui/button";
-import { Dialog } from "../../ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../ui/dialog";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 interface Disciplina {
   bk_color: string;
@@ -112,14 +122,6 @@ export function CriarLembrete() {
     }
   }
 
-  function openModal() {
-    setModalIsOpen(true);
-  }
-
-  function closeModal() {
-    setModalIsOpen(false);
-  }
-
   function clearLembrete() {
     setTitleEvent("");
     setDescriptionEvent("");
@@ -129,129 +131,134 @@ export function CriarLembrete() {
     // setIdDisc("");
     // setIdSerie("");
     // setIdTurma("");
-    closeModal();
   }
 
   return (
-    <div>
-      <Button
-        onClick={openModal}
-        className="flex items-center justify-center mt-3 rounded-lg bg-azul_verde hover:opacity-70 w-full h-12 text-white"
-        variant={null}
-      >
-        Novo Lembrete
-      </Button>
-      <Modal
-        isOpen={modalIsOpen}
-        ariaHideApp={false}
-        onRequestClose={closeModal}
-        overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black_rgba"
-        className="flex flex-col bg-background w-1/3 h-3/5 rounded-lg p-1 px-8 text-blue-600 scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
-      >
-        <form onSubmit={enviarLembrete} className="flex flex-col space-y-4">
-          <div className="flex items-center justify-center">
-            <p className="text-[25px] font-semibold">Novo lembrete</p>
-          </div>
-          <div className="bg-popover rounded-lg text-blue-600 py-4">
-            <input
-              required
-              placeholder="Título"
-              onChange={(e) => {
-                setTitleEvent(e.target.value);
-              }}
-              className="w-full placeholder-blue-600 outline-none text-[25px]"
-            />
-          </div>
-
-          <div className="w-full flex flex-col">
-            <div className="w-full flex flex-row justify-between">
-              <div className="w-1/2 text-blue-600 py-4">
-                <textarea
-                  required
-                  placeholder="Descrição"
-                  onChange={(e) => {
-                    setDescriptionEvent(e.target.value);
-                  }}
-                  className="w-fit h-fit placeholder-blue-600 outline-none text-[20px] scrollbar-thin resize-none"
-                />
-              </div>
-
-              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
-                <p className="text-[20px]">Data</p>
-                <input
-                  required
-                  type="date"
-                  onChange={(e) => {
-                    setDataEvent(e.target.value);
-                  }}
-                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
-                />
-              </div>
+    <div className="w-full">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            className="w-full flex items-center justify-center mt-3 rounded-lg bg-azul_verde hover:opacity-70 h-12 text-white"
+            variant={null}
+          >
+            Novo Lembrete
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-blue-600 text-2xl text-center">
+              Novo lembrete
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={enviarLembrete} className="flex flex-col space-y-4">
+            <div className="w-full flex flex-col text-blue-600">
+              <p className="text-[20px] font-medium">Título</p>
+              <input
+                required
+                placeholder="Insira um título"
+                onChange={(e) => {
+                  setTitleEvent(e.target.value);
+                }}
+                className="w-full placeholder-blue-600 placeholder:text-sm text-lg outline-none px-2"
+              />
             </div>
 
-            <div className="w-full flex flex-row justify-between">
-              <div className="w-1/2 flex flex-col text-blue-600 py-4">
-                <p className="text-[20px]">Início</p>
-                <input
-                  required
-                  type="time"
-                  onChange={(e) => {
-                    setInicioDateTime(e.target.value);
-                  }}
-                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
-                />
+            <div className="w-full flex flex-col">
+              <div className="w-full flex flex-row justify-between">
+                <div className="w-1/2 flex flex-col text-blue-600 py-4">
+                  <p className="text-[20px] font-medium">Descrição</p>
+                  <textarea
+                    required
+                    placeholder="Descreva aqui"
+                    onChange={(e) => {
+                      setDescriptionEvent(e.target.value);
+                    }}
+                    className="w-fit h-fit placeholder-blue-600 placeholder:text-sm text-lg outline-none scrollbar-thin resize-none px-2"
+                  />
+                </div>
+
+                <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                  <p className="text-[20px] font-medium">Data</p>
+                  <input
+                    required
+                    type="date"
+                    onChange={(e) => {
+                      setDataEvent(e.target.value);
+                    }}
+                    className="w-fit placeholder-blue-600 outline-none text-[18px] rounded-lg"
+                  />
+                </div>
               </div>
 
-              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
-                <p className="text-[20px]">Fim</p>
-                <input
-                  required
-                  type="time"
-                  onChange={(e) => {
-                    setFimDateTime(e.target.value);
-                  }}
-                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
-                />
+              <div className="w-full flex flex-row justify-between">
+                <div className="w-1/2 flex flex-col text-blue-600 py-4">
+                  <p className="text-[20px] font-medium">Início</p>
+                  <input
+                    required
+                    type="time"
+                    onChange={(e) => {
+                      setInicioDateTime(e.target.value);
+                    }}
+                    className="w-fit placeholder-blue-600 outline-none text-[18px]"
+                  />
+                </div>
+
+                <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                  <p className="text-[20px] font-medium">Fim</p>
+                  <input
+                    required
+                    type="time"
+                    onChange={(e) => {
+                      setFimDateTime(e.target.value);
+                    }}
+                    className="w-fit placeholder-blue-600 outline-none text-[18px]"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+            <DialogFooter>
+              <div className="flex flex-row items-center justify-end w-full">
+                <DialogClose asChild>
+                  <Button
+                    onClick={clearLembrete}
+                    className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
+                    variant={null}
+                  >
+                    Cancelar
+                  </Button>
+                </DialogClose>
 
-          <div className="flex flex-row items-center justify-end w-full">
-            <button
-              onClick={clearLembrete}
-              className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
-            >
-              Cancelar
-            </button>
-
-            {titleEvent.length === 0 ||
-            descriptionEvent.length === 0 ||
-            dataEvent.length === 0 ||
-            inicioDateTime.length === 0 ||
-            fimDateTime.length === 0 ? (
-              // ||
-              // idDisc.length === 0 ||
-              // idSerie.length === 0 ||
-              // idTurma.length === 0
-              <button
-                type="submit"
-                disabled={true}
-                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
-              >
-                Salvar
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4"
-              >
-                Salvar
-              </button>
-            )}
-          </div>
-        </form>
-      </Modal>
-      {/* <Dialog></Dialog> */}
+                {titleEvent.length === 0 ||
+                descriptionEvent.length === 0 ||
+                dataEvent.length === 0 ||
+                inicioDateTime.length === 0 ||
+                fimDateTime.length === 0 ? (
+                  // ||
+                  // idDisc.length === 0 ||
+                  // idSerie.length === 0 ||
+                  // idTurma.length === 0
+                  <Button
+                    type="submit"
+                    disabled={true}
+                    variant={null}
+                    className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
+                  >
+                    Salvar
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    variant={null}
+                    className="bg-blue-600 hover:opacity-70 rounded-lg text-white w-1/5 h-[40px] ml-4"
+                  >
+                    Salvar
+                  </Button>
+                )}
+              </div>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

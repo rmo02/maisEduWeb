@@ -7,9 +7,46 @@ import Matematica from "../../assets/matematica.png";
 import Portugues from "../../assets/portugues.png";
 
 import { Label } from "@/components/ui/label";
+import api from "@/api";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
 import { Calendario } from "@/components/calendario";
 
 export function Home() {
+  const { user } = useContext(AuthContext);
+  const [ultimasAulas, setUltimasAulas] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
+  const [lembretes, setLembretes] = useState([]);
+  const [disciplinas, setDisciplinas] = useState([]);
+
+  const getMaterias = async () => {
+    try {
+      const res = await api.get(`/disciplinasAluno/${user?.id}`);
+      setDisciplinas(res.data["disciplinas"]);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const getVistoPorUltimo = async () => {
+    try {
+      const res = await api.get(`/ultimasAulas/${user?.id}`);
+      setUltimasAulas(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAulasFavoritadas = async () => {
+    try {
+      const res = await api.get(`/favoritos/${user?.id}`);
+      setFavoritos(res.data["favoritos"]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">

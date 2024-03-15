@@ -1,12 +1,13 @@
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { api } from "../../api/app";
+import api from "@/api";
 import ReactPlayer from "react-player";
 import ctl from "@netlify/classnames-template-literals";
 import { Controls } from "./controlls";
 
 export function Aulas() {
   const [aula, setAula] = useState();
+  const [disciplinas, setDisciplinas] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -19,6 +20,16 @@ export function Aulas() {
     };
     getData();
   }, []);
+
+  const getMaterias = async () => {
+    try {
+      const res = await api.get(`/disciplinasAluno/idDoAluno`);
+      setDisciplinas(res.data["disciplinas"]);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 
   console.log(aula);
 

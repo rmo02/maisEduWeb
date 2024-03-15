@@ -1,6 +1,20 @@
+import api from "@/api"
 import { ChevronRight } from "lucide-react"
+import { useState } from "react"
 
 export function Conteudos() {
+  const [conteudo, setConteudo] = useState([])
+
+  const getConteudos = async() => {
+    try {
+      const res = await api.get(`/conteudosAluno/idDoAluno/idDoConteudo`);
+      setConteudo(res.data["conteudo"]);
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
