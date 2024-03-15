@@ -148,7 +148,7 @@ export function CriarLembrete() {
         overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black_rgba"
         className="flex flex-col bg-background w-1/3 h-3/5 rounded-lg p-1 px-8 text-blue-600 scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
-        <form onSubmit={enviarLembrete} className="flex flex-col space-y-6">
+        <form onSubmit={enviarLembrete} className="flex flex-col space-y-4">
           <div className="flex items-center justify-center">
             <p className="text-[25px] font-semibold">Novo lembrete</p>
           </div>
@@ -162,7 +162,8 @@ export function CriarLembrete() {
               className="w-full placeholder-blue-600 outline-none text-[25px]"
             />
           </div>
-          <div className="w-full flex flex-col w-full">
+
+          <div className="w-full flex flex-col">
             <div className="w-full flex flex-row justify-between">
               <div className="w-1/2 text-blue-600 py-4">
                 <textarea
@@ -187,6 +188,7 @@ export function CriarLembrete() {
                 />
               </div>
             </div>
+
             <div className="w-full flex flex-row justify-between">
               <div className="w-1/2 flex flex-col text-blue-600 py-4">
                 <p className="text-[20px]">Início</p>
@@ -213,6 +215,7 @@ export function CriarLembrete() {
               </div>
             </div>
           </div>
+
           <div className="flex flex-row items-center justify-end w-full">
             <button
               onClick={clearLembrete}

@@ -165,11 +165,11 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
     <div className="w-full">
       <button onClick={openModal} className="w-full">
         <div className="w-full">
-          <div className="flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] h-24 px-4">
+          <div className="flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] px-4">
             <p className="text-[#748FFC] text-[18px] font-bold mb-2">
               {meeting.title}
             </p>
-            <p className="text-foreground text-[18px] font-bold mb-2">
+            <p className="text-foreground text-[18px] font-bold mb-2 whitespace-pre-line">
               {meeting.description}
             </p>
             <div className="flex flex-row items-center justify-between">
@@ -187,15 +187,15 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
         isOpen={modalIsOpen}
         // ariaHideapi={false}
         onRequestClose={closeModal}
-        overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
+        overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black_rgba"
         className="flex flex-col bg-white w-1/3 h-3/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
-        <form>
+        <form className="flex flex-col space-y-6">
           <div className="flex items-center justify-center">
             <p className="text-[25px] font-semibold">Editar lembrete</p>
           </div>
 
-          <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
+          <div className="bg-popover rounded-lg text-blue-600 py-4">
             <input
               required
               placeholder="Título"
@@ -203,13 +203,13 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
               onChange={(e) => {
                 setTitleEvent(e.target.value);
               }}
-              className="w-fit placeholder-dark-purple outline-none text-[25px]"
+              className="w-full placeholder-blue-600 outline-none text-[25px]"
             />
           </div>
 
-          <div className="flex flex-row">
-            <div className="flex flex-col w-1/2">
-              <div className="flex flex-col text-dark-purple py-4">
+          <div className="w-full flex flex-col">
+            <div className="w-full flex flex-row justify-between">
+              <div className="w-1/2 text-blue-600 py-4">
                 <textarea
                   required
                   placeholder="Descrição"
@@ -217,11 +217,23 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
                   onChange={(e) => {
                     setDescriptionEvent(e.target.value);
                   }}
-                  className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
+                  className="w-fit h-fit placeholder-blue-600 outline-none text-[20px] scrollbar-thin resize-none"
                 />
               </div>
 
-              <div className="flex flex-col text-dark-purple py-4">
+              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                <p className="text-[20px]">Data</p>
+                <input
+                  required
+                  type="date"
+                  defaultValue={dataMasked}
+                  onChange={(e) => {
+                    setDataMasked(e.target.value);
+                  }}
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
+                />
+              </div>
+              {/* <div className="flex flex-col text-dark-purple py-4">
                 <p className="text-[20px]">Data do evento:</p>
                 <input
                   required
@@ -232,10 +244,12 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
                   }}
                   className="w-fit placeholder-dark-purple outline-none text-[18px]"
                 />
-              </div>
+              </div> */}
+            </div>
 
-              <div className="flex flex-col text-dark-purple py-4">
-                <p className="text-[20px]">Início do evento:</p>
+            <div className="w-full flex flex-row justify-between">
+              <div className="w-1/2 flex flex-col text-blue-600 py-4">
+                <p className="text-[20px]">Início</p>
                 <input
                   required
                   type="time"
@@ -243,12 +257,12 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
                   onChange={(e) => {
                     setInicioDateTime(e.target.value);
                   }}
-                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
                 />
               </div>
 
-              <div className="flex flex-col text-dark-purple py-4">
-                <p className="text-[20px]">Fim do evento:</p>
+              <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
+                <p className="text-[20px]">Fim</p>
                 <input
                   required
                   type="time"
@@ -256,140 +270,55 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
                   onChange={(e) => {
                     setFimDateTime(e.target.value);
                   }}
-                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                  className="w-fit placeholder-blue-600 outline-none text-[18px]"
                 />
               </div>
             </div>
+          </div>
 
-            <div>
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Disciplina</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  onChange={(e) => {
-                    setIdDisc(e.target.value);
-                  }}
-                  id="disciplina"
-                  value={idDisc}
-                >
-                  <option value={-1}>Selecione uma disciplina:</option>
+          <div className="flex flex-row items-center justify-end w-full">
+            <button
+              onClick={() => clearLembrete()}
+              className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
+            >
+              Cancelar
+            </button>
 
-                  {Object.entries<Disciplina>(disciplinas).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return idDisc === item[1].id ? (
-                        <option key={"disciplina" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      ) : (
-                        <option key={"disciplina" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
+            <button
+              onClick={excluirLembrete}
+              className="bg-red-500 rounded-lg text-black w-1/5 h-[40px] ml-4"
+            >
+              Excluir
+            </button>
 
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Série</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  name="serie"
-                  onChange={(e) => {
-                    setIdSerie(e.target.value);
-                  }}
-                  value={idSerie}
-                >
-                  <option value={-1}>Selecione uma série:</option>
-                  {Object.entries<Serie>(series).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return idSerie === item[1].id ? (
-                        <option key={"serie" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      ) : (
-                        <option key={"serie" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
-
-              <div className="flex flex-col text-[#4263EB] py-4">
-                <p className="text-[20px] font-semibold">Turma</p>
-                <select
-                  className="bg-[#FFFFFF] text-[16px]"
-                  name="turma"
-                  onChange={(e) => {
-                    setIdTurma(e.target.value);
-                  }}
-                  value={idTurma}
-                >
-                  <option value={-1}>Selecione uma turma:</option>
-                  {Object.entries<Turma>(turmas).map((item, i) => {
-                    if (typeof item[1] === "object" && item[1] !== null) {
-                      return idTurma === item[1].id ? (
-                        <option key={"serie" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      ) : (
-                        <option key={"serie" + i} value={item[1].id}>
-                          {item[1].name}
-                        </option>
-                      );
-                    }
-                    return null;
-                  })}
-                </select>
-              </div>
-            </div>
+            {titleEvent.length === 0 ||
+            descriptionEvent.length === 0 ||
+            dataMasked.length === 0 ||
+            inicioDateTime.length === 0 ||
+            fimDateTime.length === 0 ? (
+              // ||
+              // idDisc.length === 0 ||
+              // idSerie.length === 0 ||
+              // idTurma.length === 0
+              <button
+                type="submit"
+                disabled={true}
+                onClick={() => enviarLembrete()}
+                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
+              >
+                Salvar
+              </button>
+            ) : (
+              <button
+                type="submit"
+                onClick={() => enviarLembrete()}
+                className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4"
+              >
+                Salvar
+              </button>
+            )}
           </div>
         </form>
-        <div className="flex flex-row items-center justify-end my-4 px-4 w-full">
-          <button
-            onClick={() => clearLembrete()}
-            className="bg-[#EDF2FF] rounded-lg text-black w-1/5 h-[40px] ml-4"
-          >
-            Cancelar
-          </button>
-
-          <button
-            onClick={excluirLembrete}
-            className="bg-red-500 rounded-lg text-black w-1/5 h-[40px] ml-4"
-          >
-            Excluir
-          </button>
-
-          {titleEvent.length === 0 ||
-          descriptionEvent.length === 0 ||
-          dataMasked.length === 0 ||
-          inicioDateTime.length === 0 ||
-          fimDateTime.length === 0 ||
-          idDisc.length === 0 ||
-          idSerie.length === 0 ||
-          idTurma.length === 0 ? (
-            <button
-              type="submit"
-              disabled={true}
-              onClick={() => enviarLembrete()}
-              className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
-            >
-              Salvar
-            </button>
-          ) : (
-            <button
-              type="submit"
-              onClick={() => enviarLembrete()}
-              className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4"
-            >
-              Salvar
-            </button>
-          )}
-        </div>
       </Modal>
     </div>
   );
