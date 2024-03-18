@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
-import AddIcon from "@mui/icons-material/Add";
+import React, { useState, useEffect, useContext } from "react";
 import api from "@/api";
 import { Button } from "../../ui/button";
 import {
@@ -12,8 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../ui/dialog";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/context/AuthContext";
 
 interface Disciplina {
   bk_color: string;
@@ -49,21 +46,19 @@ interface Turma {
 }
 
 export function CriarLembrete() {
+  const { user } = useContext(AuthContext);
+
   const [disciplinas, setDisciplinas] = useState<Record<string, Disciplina>>(
     {}
   );
-
   const [series, setSeries] = useState<Record<string, Serie>>({});
   const [turmas, setTurmas] = useState<Record<string, Turma>>({});
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [dataEvent, setDataEvent] = useState("");
   const [inicioDateTime, setInicioDateTime] = useState("");
   const [fimDateTime, setFimDateTime] = useState("");
-  const [idDisc, setIdDisc] = useState("");
-  const [idSerie, setIdSerie] = useState("");
-  const [idTurma, setIdTurma] = useState("");
   // let checked = false;
   useEffect(() => {
     const getData = async () => {
@@ -102,14 +97,7 @@ export function CriarLembrete() {
         data: `${dataEvent} 00:00`,
         start: `${dataEvent} ${inicioDateTime}`,
         end: `${dataEvent} ${fimDateTime}`,
-        // id_aluno: "",
-        id_professor: "a618b405-0eaa-4992-a3ae-21dafb816646",
-        // id_disciplina: idDisc,
-        id_disciplina: "370cfa26-fd05-4c90-92c1-e06cfeda3669",
-        // id_serie: idSerie,
-        id_serie: "da06838a-f8af-4bbd-b9c4-5ad4de6d5be2",
-        // id_turma: idTurma,
-        id_turma: "6e879d7f-6c60-4dc1-aade-d6d9197ec9bd",
+        id_aluno: user?.id,
       });
       if (res.status === 201) {
         console.log(res.status);
@@ -128,9 +116,6 @@ export function CriarLembrete() {
     setDataEvent("");
     setInicioDateTime("");
     setFimDateTime("");
-    // setIdDisc("");
-    // setIdSerie("");
-    // setIdTurma("");
   }
 
   return (

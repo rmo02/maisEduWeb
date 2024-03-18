@@ -75,7 +75,7 @@ dependencies:
     specifier: ^2.15.1
     version: 2.15.1(react@18.2.0)
   react-router-dom:
-    specifier: ^6.22.1
+    specifier: ^6.15.0
     version: 6.22.2(react-dom@18.2.0)(react@18.2.0)
   tailwind-merge:
     specifier: ^2.2.1

@@ -161,26 +161,32 @@ export function EditarLembrete({ meeting }: { meeting: any }) {
     closeModal();
   }
 
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    } else {
+      return text;
+    }
+  }
+
   return (
     <div className="w-full">
       <button onClick={openModal} className="w-full">
-        <div className="w-full flex flex-col items-start mb-3 rounded-lg bg-red-600 px-4">
+        <div className="w-full flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] px-4">
           <p className="text-[#748FFC] text-[18px] font-bold mb-2">
-            {meeting.title}
+            {truncateText(meeting.title, 25)}
           </p>
-          <p className="text-foreground text-[18px] font-bold mb-2 whitespace-pre-line">
-            {meeting.description}
+          <p className="text-foreground text-[18px] text-left font-bold mb-2 whitespace-pre-line">
+            {truncateText(meeting.description, 25)}
           </p>
           <div className="flex flex-row items-center justify-between">
             <p className="text-[#748FFC] text-[14px] font-medium ">
               {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
             </p>
-            {/* <p className="text-azul_verde text-[14px] font-roboto ">
-                {meeting.turma.name}
-              </p> */}
           </div>
         </div>
       </button>
+
       <Modal
         isOpen={modalIsOpen}
         // ariaHideapi={false}

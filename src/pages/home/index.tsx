@@ -1,23 +1,19 @@
 import { Progress } from "@/components/ui/progress";
-import Artes from "../../assets/artes.png";
 import Fisica from "../../assets/fisica.png";
-import Geografia from "../../assets/geografia.png";
-import Ingles from "../../assets/ingles.png";
-import Matematica from "../../assets/matematica.png";
-import Portugues from "../../assets/portugues.png";
 
 import { Label } from "@/components/ui/label";
 import api from "@/api";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { Calendario } from "@/components/calendario";
+import { DisciplinasDTO } from "@/DTO/DisciplinasDTO";
 
 export function Home() {
   const { user } = useContext(AuthContext);
   const [ultimasAulas, setUltimasAulas] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [lembretes, setLembretes] = useState([]);
-  const [disciplinas, setDisciplinas] = useState([]);
+  const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
   const getMaterias = async () => {
     try {
@@ -47,6 +43,12 @@ export function Home() {
     }
   };
 
+  useEffect(() => {
+    getMaterias();
+    getVistoPorUltimo();
+    getAulasFavoritadas();
+  }, []);
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
@@ -60,29 +62,21 @@ export function Home() {
             <div className="flex justify-between items-center">
               <h1 className="text-blue-600 text-xl font-medium">Turmas</h1>
               <span className="text-zinc-600 text-sm underline cursor-pointer">
-                Todas as turmas
+                <a href="/disciplina">Todas as turmas</a>
               </span>
             </div>
 
-            <div className="h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 mt-5">
-              <div className="col-span-1">
-                <img src={Artes} className="w-full h-full rounded-md" />
-              </div>
-              <div className="col-span-1">
-                <img src={Matematica} className="w-full h-full rounded-md" />
-              </div>
-              <div className="col-span-1">
-                <img src={Portugues} className="w-full h-full rounded-md" />
-              </div>
-              <div className="col-span-1">
-                <img src={Ingles} className="w-full h-full rounded-md" />
-              </div>
-              <div className="col-span-1">
-                <img src={Geografia} className="w-full h-full rounded-md" />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} className="w-full h-full rounded-md" />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 mt-5">
+              {disciplinas.map((item, index) => {
+                return (
+                  <div className="col-span-1 cursor-pointer" key={index}>
+                    <img
+                      src={item.disciplina.bk_img}
+                      className="w-full h-full rounded-md"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
