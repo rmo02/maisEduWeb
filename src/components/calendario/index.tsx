@@ -15,49 +15,39 @@ import {
   startOfToday,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { CriarLembrete } from "./criarLembrete/index";
 import api from "@/api";
 import { EditarLembrete } from "./editarLembrete";
-// import { AuthContext } from "../../context/auth";
+import { AuthContext } from "../../context/AuthContext";
+import { LembretesDTO } from "@/DTO/LembretesDTO";
 
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export function Calendario() {
-  //   const { user } = useContext(AuthContext);
-  const [lembretes, setLembretes] = useState([]);
+  const { user } = useContext(AuthContext);
+  const [lembretes, setLembretes] = useState<LembretesDTO[]>([]);
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = useState<Date>(today);
   const [currentMonth, setCurrentMonth] = useState<string>(
     format(today, "MMM-yyyy")
   );
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-  const meetings = lembretes;
   const days = eachDayOfInterval({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
-  const selectedDayMeetings = meetings.filter((meeting: any) => {
+  const selectedDayLembretes = lembretes.filter((lembrete) => {
     const dataAtualFormatada =
       adicionaZero(+selectedDay.getDate().toString()) +
       "/" +
       adicionaZero(selectedDay.getMonth() + 1) +
       "/" +
       selectedDay.getFullYear();
-    return verificaData(dataAtualFormatada, meeting);
+    return verificaData(dataAtualFormatada, lembrete);
   });
-
-  // const selectedDayMeetings = lembretes.length > 0 ? lembretes.filter((meeting: any) => {
-  //     const dataAtualFormatada =
-  //       adicionaZero(+selectedDay.getDate().toString()) +
-  //       "/" +
-  //       adicionaZero(selectedDay.getMonth() + 1).toString() +
-  //       "/" +
-  //       selectedDay.getFullYear();
-  //     return verificaData(dataAtualFormatada, meeting);
-  //   }) : [];
 
   useEffect(() => {
     const getData = async () => {
@@ -79,7 +69,7 @@ export function Calendario() {
     if (numero <= 9) return "0" + numero;
     else return numero;
   }
-  function verificaData(dataSelecionada: any, dataBackend: any) {
+  function verificaData(dataSelecionada: string, dataBackend: LembretesDTO) {
     if (dataSelecionada == dataBackend.data) {
       return dataBackend.data;
     }
@@ -165,14 +155,11 @@ export function Calendario() {
                     {format(day, "d")}
                   </time>
                 </button>
-                {meetings.some((meeting: any) => {
-                  return (
-                    meeting.id_professor ===
-                      "a618b405-0eaa-4992-a3ae-21dafb816646" &&
-                    meeting.id_aluno === null &&
-                    isSameDay(parseISO(meeting.data_masked), day)
-                  );
-                }) && (
+                {lembretes.some(
+                  (lembrete) =>
+                    (lembrete.id_professor || lembrete.id_aluno === user?.id) &&
+                    isSameDay(parseISO(lembrete.data_masked), day)
+                ) && (
                   <div className="w-1 h-1 bg-sky-500 rounded-lg absolute bottom-2 left-4"></div>
                 )}
               </div>
@@ -186,22 +173,16 @@ export function Calendario() {
         </div>
         <section className="w-full h-[30vh] mt-3">
           <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb">
-            {/* <div className="overflow-y-auto h-full"> */}
             <ol className="w-full flex flex-col">
-              {selectedDayMeetings.length > 0 ? (
-                selectedDayMeetings.map(
-                  (meeting: any) =>
-                    meeting.id_professor ===
-                      "a618b405-0eaa-4992-a3ae-21dafb816646" &&
-                    meeting.id_aluno === null && (
-                      <EditarLembrete meeting={meeting} key={meeting.id} />
-                      // <Meeting meeting={meeting} key={meeting.id} />
-                    )
-                  // : (
-                  //   <div key={meeting.id}>
-                  //     <p>Sem lembretes</p>
-                  //   </div>
-                  // )
+              {selectedDayLembretes.length > 0 ? (
+                selectedDayLembretes.map((lembrete) =>
+                  lembrete.id_professor || lembrete.id_aluno === user?.id ? (
+                    <EditarLembrete lembrete={lembrete} key={lembrete.id} />
+                  ) : (
+                    <div className="w-full flex items-center justify-center mt-3">
+                      <p>Sem lembretes</p>
+                    </div>
+                  )
                 )
               ) : (
                 <div className="w-full flex items-center justify-center mt-3">
@@ -215,31 +196,6 @@ export function Calendario() {
     </div>
   );
 }
-// function Meeting({ meeting }: { meeting: any }) {
-//   return (
-//     <div className="w-full">
-//       <div className="flex flex-col justify-center mt-4 rounded-lg bg-[#FFFFFF] h-24 px-4">
-//         <p className="text-[#748FFC] text-[18px] font-bold mb-2">
-//           {meeting.title}
-//         </p>
-//         {/* <div>
-//               <EditarLembrete eventId={meeting.id} />
-//             </div> */}
-//         <p className="text-[#748FFC] text-[18px] font-bold mb-2">
-//           {meeting.description}
-//         </p>
-//         <div className="flex flex-row justify-between">
-//           <p className="text-[#748FFC] text-[14px] font-medium ">
-//             {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
-//           </p>
-//           <p className="text-azul_verde text-[14px] font-roboto ">
-//             {meeting.turma.name}
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 let colStartClasses = [
   "",

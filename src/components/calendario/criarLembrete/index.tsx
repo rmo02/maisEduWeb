@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import api from "@/api";
 import { Button } from "../../ui/button";
 import {
@@ -12,80 +12,14 @@ import {
 } from "../../ui/dialog";
 import { AuthContext } from "@/context/AuthContext";
 
-interface Disciplina {
-  bk_color: string;
-  bk_img: string;
-  code: string;
-  created_at: string;
-  icon: string;
-  id: string;
-  id_escola: string;
-  name: string;
-  status: string;
-  updated_at: string;
-}
-
-interface Serie {
-  id: string;
-  id_escola: string;
-  name: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Turma {
-  id: string;
-  id_serie: string;
-  name: string;
-  code: string;
-  shift: string;
-  year: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-}
-
 export function CriarLembrete() {
   const { user } = useContext(AuthContext);
-
-  const [disciplinas, setDisciplinas] = useState<Record<string, Disciplina>>(
-    {}
-  );
-  const [series, setSeries] = useState<Record<string, Serie>>({});
-  const [turmas, setTurmas] = useState<Record<string, Turma>>({});
 
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [dataEvent, setDataEvent] = useState("");
   const [inicioDateTime, setInicioDateTime] = useState("");
   const [fimDateTime, setFimDateTime] = useState("");
-  // let checked = false;
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(`/disciplinas`);
-
-      setDisciplinas(response.data.disciplinas);
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(`/series`);
-
-      setSeries(response.data.series);
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(`/turmas`);
-
-      setTurmas(response.data.turmas);
-    };
-    getData();
-  }, []);
 
   async function enviarLembrete(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -104,18 +38,10 @@ export function CriarLembrete() {
       }
       document.location.reload();
       alert("Lembrete criado!");
-    } catch {
+    } catch (error) {
       alert("Ocorreu um erro. Tente novamente.");
-      console.log("erro");
+      console.log("Erro ao criar lembrete. ", error);
     }
-  }
-
-  function clearLembrete() {
-    setTitleEvent("");
-    setDescriptionEvent("");
-    setDataEvent("");
-    setInicioDateTime("");
-    setFimDateTime("");
   }
 
   return (
@@ -148,64 +74,72 @@ export function CriarLembrete() {
               />
             </div>
 
-            <div className="w-full flex flex-col">
-              <div className="w-full flex flex-row justify-between">
-                <div className="w-1/2 flex flex-col text-blue-600 py-4">
-                  <p className="text-[20px] font-medium">Descrição</p>
-                  <textarea
-                    required
-                    placeholder="Descreva aqui"
-                    onChange={(e) => {
-                      setDescriptionEvent(e.target.value);
-                    }}
-                    className="w-fit h-fit placeholder-blue-600 placeholder:text-sm text-lg outline-none scrollbar-thin resize-none px-2"
-                  />
-                </div>
+            <div className="w-full flex flex-col text-blue-600">
+              <p className="text-[20px] font-medium">Descrição</p>
+              <textarea
+                required
+                placeholder="Descreva aqui"
+                onChange={(e) => {
+                  setDescriptionEvent(e.target.value);
+                }}
+                className="w-full placeholder-blue-600 placeholder:text-sm text-lg outline-none px-2 scrollbar-thin resize-none"
+              />
+            </div>
 
-                <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
-                  <p className="text-[20px] font-medium">Data</p>
-                  <input
-                    required
-                    type="date"
-                    onChange={(e) => {
+            <div className="w-full flex flex-row justify-between">
+              <div className="w-1/3 flex flex-col text-blue-600 pr-2">
+                <p className="text-[20px] font-medium">Data</p>
+                <input
+                  required
+                  type="date"
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const today = new Date();
+                    if (selectedDate < today) {
+                      alert(
+                        "Você não pode selecionar uma data anterior ao dia de hoje."
+                      );
+                      //resentando o valor do input para o dia de hoje
+                      const formattedToday = today.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+                      e.target.value = formattedToday;
+                      setDataEvent(formattedToday); // Atualizando o estado com o valor do dia de hoje
+                    } else {
                       setDataEvent(e.target.value);
-                    }}
-                    className="w-fit placeholder-blue-600 outline-none text-[18px] rounded-lg"
-                  />
-                </div>
+                    }
+                  }}
+                  className="w-full placeholder-blue-600 outline-none text-[18px] rounded-lg"
+                />
               </div>
 
-              <div className="w-full flex flex-row justify-between">
-                <div className="w-1/2 flex flex-col text-blue-600 py-4">
-                  <p className="text-[20px] font-medium">Início</p>
-                  <input
-                    required
-                    type="time"
-                    onChange={(e) => {
-                      setInicioDateTime(e.target.value);
-                    }}
-                    className="w-fit placeholder-blue-600 outline-none text-[18px]"
-                  />
-                </div>
+              <div className="w-1/3 flex flex-col justify-center text-blue-600 pl-2">
+                <p className="text-[20px] font-medium">Início</p>
+                <input
+                  required
+                  type="time"
+                  onChange={(e) => {
+                    setInicioDateTime(e.target.value);
+                  }}
+                  className="w-full placeholder-blue-600 outline-none text-[18px]"
+                />
+              </div>
 
-                <div className="w-1/2 flex flex-col text-blue-600 py-4 pl-8">
-                  <p className="text-[20px] font-medium">Fim</p>
-                  <input
-                    required
-                    type="time"
-                    onChange={(e) => {
-                      setFimDateTime(e.target.value);
-                    }}
-                    className="w-fit placeholder-blue-600 outline-none text-[18px]"
-                  />
-                </div>
+              <div className="w-1/3 flex flex-col justify-center text-blue-600 pl-4">
+                <p className="text-[20px] font-medium">Fim</p>
+                <input
+                  required
+                  type="time"
+                  onChange={(e) => {
+                    setFimDateTime(e.target.value);
+                  }}
+                  className="w-full placeholder-blue-600 outline-none text-[18px]"
+                />
               </div>
             </div>
+
             <DialogFooter>
               <div className="flex flex-row items-center justify-end w-full">
                 <DialogClose asChild>
                   <Button
-                    onClick={clearLembrete}
                     className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
                     variant={null}
                   >
@@ -218,10 +152,6 @@ export function CriarLembrete() {
                 dataEvent.length === 0 ||
                 inicioDateTime.length === 0 ||
                 fimDateTime.length === 0 ? (
-                  // ||
-                  // idDisc.length === 0 ||
-                  // idSerie.length === 0 ||
-                  // idTurma.length === 0
                   <Button
                     type="submit"
                     disabled={true}
