@@ -1,44 +1,31 @@
 import { ChevronRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import api from "@/api";
 import ReactPlayer from "react-player";
-import ctl from "@netlify/classnames-template-literals";
-import { Controls } from "./controlls";
+import { ConteudoDTO } from "@/DTO/ConteudoDTO";
+import { useParams } from "react-router-dom";
+import { AuthContext } from "@/context/AuthContext";
 
 export function Aulas() {
-  const [aula, setAula] = useState();
-  const [disciplinas, setDisciplinas] = useState([]);
+  const { user } = useContext(AuthContext);
+  const { IdConteudo } = useParams();
+  const [conteudo, setConteudo] = useState<ConteudoDTO[]>([]);
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(
-        `/conteudo/da06838a-f8af-4bbd-b9c4-5ad4de6d5be2/370cfa26-fd05-4c90-92c1-e06cfeda3669`
-      );
-      // const response = await api.get(`/conteudo/${idSerie}/${idDisc}`);
-      // console.log("/conteudo/idSerie/idDisc: ", response.data)
-      setAula(response.data[0].items[0]);
-    };
-    getData();
-  }, []);
-
-  const getMaterias = async () => {
+  const getConteudos = async () => {
     try {
-      const res = await api.get(`/disciplinasAluno/idDoAluno`);
-      setDisciplinas(res.data["disciplinas"]);
+      const res = await api.get(`/conteudosAluno/${user?.id}/${IdConteudo}`);
+      setConteudo(res.data);
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  console.log(aula);
+  console.log(conteudo)
 
-  const player = ctl(`
-  border: 2px solid #7b2cbf;
-  object-fit: cover;
-  padding: 0;
-  margin: 5;
-  `);
+  useEffect(() => {
+    getConteudos();
+  }, []);
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
@@ -54,7 +41,6 @@ export function Aulas() {
           </button>
         </div>
       </div>
-      {/* Player */}
       <div className="w-full flex items-center justify-center">
         <div className="border-2 border-solid border-blue-600 object-cover p-0 m-0">
           <ReactPlayer
@@ -63,7 +49,6 @@ export function Aulas() {
             loop
             url="https://cdn.jmvstream.com/vod/vod_11696/f/i1ufkp132v5a501/h/4/playlist.m3u8"
           />
-          {/* <Controls/> */}
         </div>
       </div>
 

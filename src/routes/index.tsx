@@ -24,8 +24,8 @@ function RotasProtegidas() {
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/disciplinas" element={<Disciplinas />} />
-        <Route path="/disciplinas/:id" element={<Conteudos />} />
-        <Route path="/disciplinas/:id/aula/1" element={<Aulas />} />
+        <Route path="/disciplinas/:idDisc" element={<Conteudos />} />
+        <Route path="/disciplinas/:idDisc/:IdConteudo" element={<Aulas />} />
         <Route path="/progresso" element={<Progresso />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/video" element={<VideoPlayer />} />

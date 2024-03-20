@@ -12,7 +12,6 @@ export function Home() {
   const { user } = useContext(AuthContext);
   const [ultimasAulas, setUltimasAulas] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
-  const [lembretes, setLembretes] = useState([]);
   const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
   const getMaterias = async () => {
@@ -70,10 +69,12 @@ export function Home() {
               {disciplinas.map((item, index) => {
                 return (
                   <div className="col-span-1 cursor-pointer" key={index}>
-                    <img
-                      src={item.disciplina.bk_img}
-                      className="w-full h-full rounded-md"
-                    />
+                    <a href={`/disciplinas/${item.disciplina.id}`}>
+                      <img
+                        src={item.disciplina.bk_img}
+                        className="w-full h-full rounded-md"
+                      />
+                    </a>
                   </div>
                 );
               })}

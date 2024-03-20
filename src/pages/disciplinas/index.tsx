@@ -8,7 +8,7 @@ export function Disciplinas() {
   const { user } = useContext(AuthContext);
   const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
-  const getMaterias = async () => {
+  const getDisciplinas = async () => {
     try {
       const res = await api.get(`/disciplinasAluno/${user?.id}`);
       setDisciplinas(res.data["disciplinas"]);
@@ -19,7 +19,7 @@ export function Disciplinas() {
   };
 
   useEffect(() => {
-    getMaterias();
+    getDisciplinas();
   }, []);
 
   return (
@@ -32,10 +32,12 @@ export function Disciplinas() {
               console.log(item);
               return (
                 <div className="col-span-1 cursor-pointer" key={index}>
-                  <img
-                    src={item.disciplina.bk_img}
-                    className="w-full h-full rounded-md"
-                  />
+                  <a href={`/disciplinas/${item.disciplina.id}`}>
+                    <img
+                      src={item.disciplina.bk_img}
+                      className="w-full h-full rounded-md"
+                    />
+                  </a>
                 </div>
               );
             })}
