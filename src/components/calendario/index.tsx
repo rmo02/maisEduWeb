@@ -172,7 +172,7 @@ export function Calendario() {
           </div>
         </div>
         <section className="w-full h-[30vh] mt-3">
-          <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb">
+          <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb pr-2">
             <ol className="w-full flex flex-col">
               {selectedDayLembretes.length > 0 ? (
                 selectedDayLembretes.map((lembrete) =>

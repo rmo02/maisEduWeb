@@ -52,8 +52,8 @@ export function Home() {
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
         <h1 className="text-zinc-700 text-2xl">
-          Olá <span className="text-blue-500 font-medium">Vinicius</span> o que
-          vamos estudar hoje?
+          Olá, <span className="text-blue-500 font-medium">{user?.name}!</span>{" "}
+          O que vamos estudar hoje?
         </h1>
 
         <div className="w-full h-full flex gap-6 justify-between py-2">
@@ -69,7 +69,7 @@ export function Home() {
               {disciplinas.map((item, index) => {
                 return (
                   <div className="col-span-1 cursor-pointer" key={index}>
-                    <a href={`/disciplinas/${item.disciplina.id}`}>
+                    <a href={`/disciplinas/${item.disciplina.id}/assunto`}>
                       <img
                         src={item.disciplina.bk_img}
                         className="w-full h-full rounded-md"

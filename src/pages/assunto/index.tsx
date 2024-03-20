@@ -1,22 +1,22 @@
-import { ConteudoDTO } from "@/DTO/ConteudoDTO";
+import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { DisciplinaDTO } from "@/DTO/DisciplinaDTO";
-import api from "@/api";
 import { Calendario } from "@/components/calendario";
 import { AuthContext } from "@/context/AuthContext";
+import api from "@/api";
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export function Conteudos() {
+export function Assunto() {
   const { user } = useContext(AuthContext);
   const { idDisc } = useParams();
   const [disciplina, setDisciplina] = useState<DisciplinaDTO | null>(null);
-  const [conteudo, setConteudo] = useState<ConteudoDTO[]>([]);
+  const [assunto, setAssunto] = useState<AssuntoDTO[]>([]);
 
-  const getConteudos = async () => {
+  const getAssunto = async () => {
     try {
       const res = await api.get(`/conteudosAluno/${user?.id}/${idDisc}`);
-      setConteudo(res.data["conteudo"]["conteudo"]);
+      setAssunto(res.data.conteudo["conteudo"]);
     } catch (error) {
       console.log(error);
       throw error;
@@ -33,7 +33,7 @@ export function Conteudos() {
   };
 
   useEffect(() => {
-    getConteudos();
+    getAssunto();
     getDisciplinas();
   }, []);
 
@@ -43,10 +43,11 @@ export function Conteudos() {
         <h1 className="text-blue-600 text-xl font-medium mb-2">
           {disciplina?.name}
         </h1>
-        
+
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
-          {conteudo.map((item, index) => (
-            <a href={`/disciplinas/${idDisc}/${item.id}`} key={index}>
+          {assunto.map((item, index) => (
+            <a href={`/disciplinas/${idDisc}/assunto/${item.id}`} key={index}>
+              {/* <a href={`/disciplinas/${idDisc}/${item.id}`} key={index}> */}
               <div className="w-full flex justify-between items-center bg-azul_azul_select rounded-lg h-10 cursor-pointer">
                 <h1 className="ml-4 text-azul_claro-foreground font-medium text-lg">
                   {item.name}

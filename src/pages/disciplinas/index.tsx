@@ -29,10 +29,9 @@ export function Disciplinas() {
         <div className="flex flex-col bg-white p-6 rounded-xl justify-center items-center">
           <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2">
             {disciplinas.map((item, index) => {
-              console.log(item);
               return (
                 <div className="col-span-1 cursor-pointer" key={index}>
-                  <a href={`/disciplinas/${item.disciplina.id}`}>
+                  <a href={`/disciplinas/${item.disciplina.id}/assunto`}>
                     <img
                       src={item.disciplina.bk_img}
                       className="w-full h-full rounded-md"
