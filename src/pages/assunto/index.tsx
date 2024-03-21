@@ -1,11 +1,11 @@
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { DisciplinaDTO } from "@/DTO/DisciplinaDTO";
-import { Calendario } from "@/components/calendario";
 import { AuthContext } from "@/context/AuthContext";
 import api from "@/api";
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Tabs } from "@/components/tab";
 
 export function Assunto() {
   const { user } = useContext(AuthContext);
@@ -46,7 +46,10 @@ export function Assunto() {
 
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
           {assunto.map((item, index) => (
-            <a href={`/disciplinas/${idDisc}/assunto/${item.id}/conteudo`} key={index}>
+            <a
+              href={`/disciplinas/${idDisc}/assunto/${item.id}/conteudo`}
+              key={index}
+            >
               {/* <a href={`/disciplinas/${idDisc}/${item.id}`} key={index}> */}
               <div className="w-full flex justify-between items-center bg-azul_azul_select rounded-lg h-10 cursor-pointer">
                 <h1 className="ml-4 text-azul_claro-foreground font-medium text-lg">
@@ -59,7 +62,7 @@ export function Assunto() {
         </div>
       </div>
       <div className="w-[30%]">
-        <Calendario />
+        <Tabs />
       </div>
     </div>
   );

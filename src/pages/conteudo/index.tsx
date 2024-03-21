@@ -1,8 +1,6 @@
-import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { AulaDTO } from "@/DTO/AulaDTO";
 import { DisciplinaDTO } from "@/DTO/DisciplinaDTO";
 import { api } from "@/api/app";
-import { Calendario } from "@/components/calendario";
 import { AuthContext } from "@/context/AuthContext";
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -10,6 +8,7 @@ import { useParams } from "react-router-dom";
 import iconAtividade from "../../assets/icons/Ícone Atividade.png";
 import iconAula from "../../assets/icons/Ícone Aula.png";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
+import { Tabs } from "@/components/tab";
 
 export function Conteudo() {
   const { user } = useContext(AuthContext);
@@ -99,7 +98,7 @@ export function Conteudo() {
         </div>
       </div>
       <div className="w-[30%]">
-        <Calendario />
+        <Tabs />
       </div>
     </div>
   );
