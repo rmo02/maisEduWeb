@@ -5,10 +5,10 @@ import ReactPlayer from "react-player";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
-import { Calendario } from "@/components/calendario";
 // import { AulaDTO } from "@/DTO/AulaDTO";
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
+import { Tabs } from "@/components/tab";
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
@@ -127,7 +127,7 @@ export function Aulas() {
       </div>
 
       <div className="w-[30%]">
-        <Calendario />
+        <Tabs/>
       </div>
     </div>
   );

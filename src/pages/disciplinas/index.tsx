@@ -1,5 +1,5 @@
 import api from "@/api";
-import { Calendario } from "@/components/calendario";
+import { Tabs } from "@/components/tab";
 import { AuthContext } from "@/context/AuthContext";
 import { DisciplinasDTO } from "@/DTO/DisciplinasDTO";
 import { useContext, useEffect, useState } from "react";
@@ -44,7 +44,7 @@ export function Disciplinas() {
         </div>
       </div>
       <div className="w-[30%]">
-        <Calendario />
+        <Tabs />
       </div>
     </div>
   );

@@ -1,12 +1,11 @@
-import { Progress } from "@/components/ui/progress";
-import Fisica from "../../assets/fisica.png";
-
-import { Label } from "@/components/ui/label";
-import api from "@/api";
 import { useContext, useEffect, useState } from "react";
+import api from "@/api";
+import Fisica from "../../assets/fisica.png";
+import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
 import { AuthContext } from "@/context/AuthContext";
-import { Calendario } from "@/components/calendario";
 import { DisciplinasDTO } from "@/DTO/DisciplinasDTO";
+import { Tabs } from "@/components/tab";
 
 export function Home() {
   const { user } = useContext(AuthContext);
@@ -163,7 +162,7 @@ export function Home() {
       </div>
 
       <div className="w-[30%]">
-        <Calendario />
+        <Tabs />
       </div>
     </div>
   );

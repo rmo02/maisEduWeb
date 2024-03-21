@@ -78,10 +78,10 @@ export function Calendario() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex items-start justify-between">
+      {/* <div className="w-full flex items-start justify-between">
         <p className="text-blue-600 text-lg font-bold">Calendário</p>
         <p className="text-cinza_escura text-lg font-medium">Anotações</p>
-      </div>
+      </div> */}
       <div className="flex flex-col">
         <div className="py-4 px-4 bg-blue-600 rounded-lg h-1/2">
           <div className="flex items-center justify-between mt-1">
