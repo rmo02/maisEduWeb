@@ -46,7 +46,7 @@ export function Assunto() {
 
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
           {assunto.map((item, index) => (
-            <a href={`/disciplinas/${idDisc}/assunto/${item.id}`} key={index}>
+            <a href={`/disciplinas/${idDisc}/assunto/${item.id}/conteudo`} key={index}>
               {/* <a href={`/disciplinas/${idDisc}/${item.id}`} key={index}> */}
               <div className="w-full flex justify-between items-center bg-azul_azul_select rounded-lg h-10 cursor-pointer">
                 <h1 className="ml-4 text-azul_claro-foreground font-medium text-lg">

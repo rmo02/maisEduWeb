@@ -9,20 +9,21 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import iconAtividade from "../../assets/icons/Ícone Atividade.png";
 import iconAula from "../../assets/icons/Ícone Aula.png";
+import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 
 export function Conteudo() {
   const { user } = useContext(AuthContext);
   const { idDisc, idAssunto } = useParams();
 
   const [disciplina, setDisciplina] = useState<DisciplinaDTO | null>(null);
-  const [assunto, setAssunto] = useState<AssuntoDTO | null>(null);
-  const [conteudo, setConteudo] = useState<AulaDTO[]>([]);
+  const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
+  const [aula, setAula] = useState<AulaDTO[]>([])
 
   const getAssunto = async () => {
     try {
       const res = await api.get(`/conteudos/${idAssunto}/${user?.id}`);
-      setAssunto(res.data.conteudo);
-      setConteudo(res.data.conteudo.array_conteudos);
+      setConteudo(res.data.conteudo);
+      setAula(res.data.conteudo.array_conteudos);
     } catch (error) {
       console.log(error);
       throw error;
@@ -43,7 +44,7 @@ export function Conteudo() {
     getDisciplinas();
   }, []);
 
-  console.log(assunto);
+  console.log('conteudo',conteudo);
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
@@ -56,16 +57,16 @@ export function Conteudo() {
             <ChevronRight />
           </h1>
           <h1 className="text-blue-600 text-xl font-medium mb-2">
-            {assunto?.name}
+            {conteudo?.name}
           </h1>
         </div>
 
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
-          {conteudo.map((item, index) => {
+          {aula.map((item, index) => {
             console.log(item);
             return (
               <a
-                href={`/disciplinas/${idDisc}/aula/${assunto?.id}`}
+                href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/${conteudo?.id}/aula`}
                 key={index}
               >
                 <div className="w-full flex items-center rounded-lg h-10 cursor-pointer mb-4 p-4">

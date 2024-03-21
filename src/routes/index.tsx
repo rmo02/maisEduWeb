@@ -27,11 +27,11 @@ function RotasProtegidas() {
         <Route path="/disciplinas" element={<Disciplinas />} />
         <Route path="/disciplinas/:idDisc/assunto/" element={<Assunto />} />
         <Route
-          path="/disciplinas/:idDisc/assunto/:idAssunto"
+          path="/disciplinas/:idDisc/assunto/:idAssunto/conteudo"
           element={<Conteudo />}
         />
         <Route
-          path="/disciplinas/:idDisc/aula/:idConteudo"
+          path="/disciplinas/:idDisc/assunto/:idAssunto/conteudo/:idConteudo/aula"
           element={<Aulas />}
         />
         <Route path="/progresso" element={<Progresso />} />

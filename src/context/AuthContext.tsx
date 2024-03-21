@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 
 interface User {
   id: string;
@@ -11,19 +11,21 @@ interface AuthContextType {
   setToken: (newToken: string | null) => void;
   user: User | null;
   setUser: (newUser: User | null) => void;
+  logout: () => void;
 }
 
 const initialUser: User | null = {
   id: "",
   id_senha: "",
-  name: ""
+  name: "",
 };
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
   setToken: () => {},
   user: initialUser,
-  setUser: () => {}
+  setUser: () => {},
+  logout: () => {},
 });
 
 interface AuthProviderProps {
@@ -63,8 +65,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const logout = () => {
+    updateToken(null);
+    updateUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ token, setToken: updateToken, user, setUser: updateUser }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        setToken: updateToken,
+        user,
+        setUser: updateUser,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -7,8 +7,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../components/ui/popover";
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export function Navbar() {
+  const { user, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    return <Navigate to="/login" />;
+  };
+  
+
   return (
     <div className="w-full h-16 py-3 px-52 bg-blue-600 flex justify-between items-center mb-2">
       <div>
@@ -41,7 +52,7 @@ export function Navbar() {
         </ul>
       </div>
       <div className="flex gap-2 items-center">
-        <p className="text-zinc-100 text-lg font-medium">Vinicius</p>
+        <p className="text-zinc-100 text-lg font-medium">{user?.name}</p>
         <Popover>
           <PopoverTrigger>
             <img
@@ -68,9 +79,9 @@ export function Navbar() {
               </div>
               <div className="flex justify-start items-center gap-2 mb-2">
                 <LogOut className="w-5 h-5 text-slate-600" />
-                <a href="/sair">
+                <button onClick={handleLogout}>
                   <p className="text-sm text-slate-600 font-semibold">Sair</p>
-                </a>
+                </button>
               </div>
             </div>
           </PopoverContent>
