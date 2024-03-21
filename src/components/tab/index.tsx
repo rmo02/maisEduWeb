@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Anotacoes } from "../anotações";
+import { Anotacoes } from "../anotacoes";
 import { Calendario } from "../calendario";
 
 export function Tabs() {
