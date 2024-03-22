@@ -183,7 +183,7 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
                 <div className="flex flex-row items-center justify-end w-full">
                   <DialogClose asChild>
                     <Button
-                      className="bg-popover rounded-lg text-black w-1/5 h-[40px]"
+                      className="bg-popover hover:opacity-70 rounded-lg text-black font-semibold w-1/5 h-[40px]"
                       variant={null}
                     >
                       Cancelar
@@ -192,7 +192,7 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
 
                   <Button
                     onClick={excluirLembrete}
-                    className="bg-red-500 rounded-lg text-black w-1/5 h-[40px] ml-4"
+                    className="bg-red-500 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
                     variant={null}
                   >
                     Excluir
@@ -207,7 +207,7 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
                       type="submit"
                       disabled={true}
                       variant={null}
-                      className="bg-blue-600 rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
+                      className="bg-blue-600 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4 cursor-not-allowed"
                     >
                       Salvar
                     </Button>
@@ -215,7 +215,7 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
                     <Button
                       type="submit"
                       variant={null}
-                      className="bg-blue-600 hover:opacity-70 rounded-lg text-white w-1/5 h-[40px] ml-4"
+                      className="bg-blue-600 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
                     >
                       Salvar
                     </Button>

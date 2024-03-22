@@ -34,7 +34,7 @@ export function Disciplinas() {
                   <a href={`/disciplinas/${item.disciplina.id}/assunto`}>
                     <img
                       src={item.disciplina.bk_img}
-                      className="w-full h-full rounded-md"
+                      className="w-full h-full rounded-md hover:scale-105 duration-300 ease-in-out"
                     />
                   </a>
                 </div>

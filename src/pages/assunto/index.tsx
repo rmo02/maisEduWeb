@@ -1,11 +1,11 @@
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
-import { DisciplinaDTO } from "@/DTO/DisciplinaDTO";
 import { AuthContext } from "@/context/AuthContext";
 import api from "@/api";
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs } from "@/components/tab";
+import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 
 export function Assunto() {
   const { user } = useContext(AuthContext);

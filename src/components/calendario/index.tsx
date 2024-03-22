@@ -78,12 +78,8 @@ export function Calendario() {
 
   return (
     <div className="w-full">
-      {/* <div className="w-full flex items-start justify-between">
-        <p className="text-blue-600 text-lg font-bold">Calendário</p>
-        <p className="text-cinza_escura text-lg font-medium">Anotações</p>
-      </div> */}
       <div className="flex flex-col">
-        <div className="py-4 px-4 bg-blue-600 rounded-lg h-1/2">
+        <div className="p-2 bg-blue-600 rounded-lg h-1/2">
           <div className="flex items-center justify-between mt-1">
             <button
               type="button"
@@ -171,7 +167,7 @@ export function Calendario() {
             <CriarLembrete />
           </div>
         </div>
-        <section className="w-full h-[30vh] mt-3">
+        <section className="w-full h-[26vh] mt-3">
           <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb pr-2">
             <ol className="w-full flex flex-col">
               {selectedDayLembretes.length > 0 ? (
