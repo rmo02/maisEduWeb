@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
-import { AtividadeDTO, AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
+import { AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import { Tabs } from "@/components/tab";
@@ -18,24 +18,30 @@ import {
 
 import iconAula from "../../assets/icons/mini/Ícone Aula Mini.png";
 import iconAtividade from "../../assets/icons/mini/Ícone Atividade Mini.png";
+import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
   const { idDisc, idAssunto, numIndex } = useParams();
+
+  const indexx: number | undefined = numIndex ? parseInt(numIndex) : undefined;
 
   const [assunto, setAssunto] = useState<AssuntoDTO[]>([]);
   const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
   const [aula, setAula] = useState<AulaDTO[]>([]);
 
   const [videoAula, setVideoAula] = useState<VideoAulaDTO | null>(null);
-  const [atividade, setAtividade] = useState<AtividadeDTO | string>();
-  // const [firstAula, setFirstAula] = useState("");
-  const [nameDisciplina, setNameDisciplina] = useState();
-  // const [nameConteudo, setNameConteudo] = useState("");
-  // const [idBimestre, setIdBimestre] = useState();
-  // const [idProfessor, setIdProfessor] = useState();
-  // const [nomeProfessor, setNomeProfessor] = useState();
-  // const [firstVideoTitle, setFirstVideoTitle] = useState("");
+  const [titleConteudo, setTitleConteudo] = useState("");
+  const [newTitleConteudo, setNewTitleConteudo] = useState("");
+  // const [atividade, setAtividade] = useState<AtividadeDTO | string>();
+  const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
+
+  const idProcurado = conteudo?.id;
+  const indexDesejado = assunto.findIndex((item) => item.id === idProcurado);
+  console.log(indexDesejado); // Isso irá imprimir o índice do objeto com o id '1f333791-1f8c-421f-b4fa-dd9c11792d34' no array 'assunto'
+  const [activeItem, setActiveItem] = useState<string | undefined>(
+    `item-${indexDesejado}`
+  );
 
   const [favoritado, setFavoritado] = useState(false);
   const handleFavoritar = () => {
@@ -46,6 +52,7 @@ export function Aulas() {
     try {
       const res = await api.get(`/conteudosAluno/${user?.id}/${idDisc}`);
       setAssunto(res.data.conteudo["conteudo"]);
+      setActiveItem(`item-${indexDesejado}`);
     } catch (error) {
       console.log(error);
       throw error;
@@ -57,13 +64,13 @@ export function Aulas() {
       const res = await api.get(`/conteudos/${idAssunto}/${user?.id}`);
       setConteudo(res.data["conteudo"]);
       setAula(res.data.conteudo["array_conteudos"]);
+      setNewTitleConteudo(res.data["conteudo"].name);
       if (numIndex !== undefined) {
         setVideoAula(
           res.data.conteudo["array_conteudos"][Number(numIndex)].aula
         );
       }
-      // setFirstAula(res.data.conteudo["first_aula"]);
-      setNameDisciplina(res.data.conteudo["disciplina"].name);
+      setDisciplina(res.data.conteudo["disciplina"]);
     } catch (error) {
       console.log(error);
       throw error;
@@ -79,9 +86,9 @@ export function Aulas() {
     try {
       const res = await api.get(`/conteudos/${id}/${user?.id}`);
       setConteudo(res.data["conteudo"]);
+      setTitleConteudo(res.data["conteudo"].name);
       setAula(res.data.conteudo["array_conteudos"]);
-      // setFirstAula(res.data.conteudo["first_aula"]);
-      setNameDisciplina(res.data.conteudo["disciplina"].name);
+      setDisciplina(res.data.conteudo["disciplina"]);
     } catch (error) {
       console.log(error);
       throw error;
@@ -91,17 +98,25 @@ export function Aulas() {
   const handleNewIdVideoAula = async (index: number) => {
     if (aula[index].aula) {
       setVideoAula(aula[index].aula);
+      setNewTitleConteudo(titleConteudo);
     } else if (aula[index].atividade) {
-      setAtividade(aula[index].atividade.thumb);
+      // setAtividade(aula[index].atividade.thumb);
     }
   };
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
       {/* Side content */}
       <div className="w-[25%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
-          <Accordion type="single" collapsible>
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue={activeItem}
+            // defaultValue={`item-${indexDesejado}`}
+          >
+            {/* defaultValue={`item-${indexx ?? 'default'}`} */}
             {assunto.map((item, index) => (
               <AccordionItem
                 key={index}
@@ -109,7 +124,7 @@ export function Aulas() {
                 onClick={() => handleNewIdAssunto(item.id)}
               >
                 <AccordionTrigger>
-                  <div className="w-full flex justify-center items-center cursor-pointer">
+                  <div className="w-full flex justify-center items-center cursor-pointer font-semibold">
                     {item.name}
                   </div>
                 </AccordionTrigger>
@@ -125,7 +140,13 @@ export function Aulas() {
                           <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg">
                             <img src={iconAula} className="w-6 h-6" />
                             <div className="w-full flex flex-row justify-between items-center">
-                              <h1 className="ml-2 text-azul_claro-foreground font-medium text-base">
+                              <h1
+                                className={`ml-2 font-semibold text-base ${
+                                  item?.aula?.id === videoAula?.id
+                                    ? "text-azul_claro-foreground"
+                                    : "text-cinza_escuro-foreground"
+                                }`}
+                              >
                                 {item?.aula?.title}
                               </h1>
                               {/* <ChevronRight className="w-6 h-6 text-azul_claro mr-2" /> */}
@@ -136,7 +157,13 @@ export function Aulas() {
                           <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg">
                             <img src={iconAtividade} className="w-6 h-6" />
                             <div className="w-full flex flex-row justify-between items-center">
-                              <h1 className="ml-2 text-azul_claro-foreground font-medium text-base">
+                              <h1
+                                className={`ml-2 font-semibold text-base ${
+                                  item?.aula?.id === videoAula?.id
+                                    ? "text-azul_claro-foreground"
+                                    : "text-cinza_escuro-foreground"
+                                }`}
+                              >
                                 {item?.atividade?.title}
                               </h1>
                               {/* <ChevronRight className="w-6 h-6 text-azul_claro mr-2" /> */}
@@ -155,14 +182,21 @@ export function Aulas() {
       <div className="w-full flex flex-col items-start">
         <div className="flex items-center mb-4">
           <div className="flex flex-row">
-            <h1 className="text-blue-600 text-xl font-medium mb-2">
-              {nameDisciplina}
+            <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+              <a href={`/disciplinas/${disciplina?.id}/assunto`}>
+                {disciplina?.name}
+              </a>
             </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
               <ChevronRight />
             </h1>
-            <h1 className="text-blue-600 text-xl font-medium mb-2">
-              {conteudo?.name}
+            <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+              <a
+                href={`/disciplinas/${disciplina?.id}/assunto/${conteudo?.id}/conteudo`}
+              >
+                {/* {conteudo?.name} */}
+                {newTitleConteudo}
+              </a>
             </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
               <ChevronRight />
@@ -180,7 +214,6 @@ export function Aulas() {
               controls={true}
               playing
               loop
-              // url="https://cdn.jmvstream.com/vod/vod_11696/f/i1ufkp132v5a501/h/4/playlist.m3u8"
               url={videoAula?.file}
             />
             <button

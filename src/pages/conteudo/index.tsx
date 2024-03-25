@@ -28,6 +28,7 @@ export function Conteudo() {
       throw error;
     }
   };
+
   const getDisciplinas = async () => {
     try {
       const res = await api.get(`/disciplinas/${idDisc}`);
@@ -43,14 +44,14 @@ export function Conteudo() {
     getDisciplinas();
   }, []);
 
-  console.log("conteudo", conteudo);
-
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
         <div className="flex flex-row">
-          <h1 className="text-blue-600 text-xl font-medium mb-2">
-            {disciplina?.name}
+          <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+            <a href={`/disciplinas/${disciplina?.id}/assunto`}>
+              {disciplina?.name}
+            </a>
           </h1>
           <h1 className="text-blue-600 text-xl font-medium mb-2">
             <ChevronRight />
@@ -62,7 +63,6 @@ export function Conteudo() {
 
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
           {aula.map((item, index) => {
-            console.log(item);
             return (
               <a
                 href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/${conteudo?.id}/aula/${index}`}
