@@ -24,8 +24,6 @@ export function Aulas() {
   const { user } = useContext(AuthContext);
   const { idDisc, idAssunto, numIndex } = useParams();
 
-  const indexx: number | undefined = numIndex ? parseInt(numIndex) : undefined;
-
   const [assunto, setAssunto] = useState<AssuntoDTO[]>([]);
   const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
   const [aula, setAula] = useState<AulaDTO[]>([]);
@@ -36,23 +34,17 @@ export function Aulas() {
   // const [atividade, setAtividade] = useState<AtividadeDTO | string>();
   const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
 
-  const idProcurado = conteudo?.id;
-  const indexDesejado = assunto.findIndex((item) => item.id === idProcurado);
-  console.log(indexDesejado); // Isso irá imprimir o índice do objeto com o id '1f333791-1f8c-421f-b4fa-dd9c11792d34' no array 'assunto'
-  const [activeItem, setActiveItem] = useState<string | undefined>(
-    `item-${indexDesejado}`
-  );
-
   const [favoritado, setFavoritado] = useState(false);
   const handleFavoritar = () => {
     setFavoritado(!favoritado);
   };
 
+  const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
+
   const getAssunto = async () => {
     try {
       const res = await api.get(`/conteudosAluno/${user?.id}/${idDisc}`);
       setAssunto(res.data.conteudo["conteudo"]);
-      setActiveItem(`item-${indexDesejado}`);
     } catch (error) {
       console.log(error);
       throw error;
@@ -78,9 +70,18 @@ export function Aulas() {
   };
 
   useEffect(() => {
-    getConteudos();
     getAssunto();
+    getConteudos();
   }, []);
+
+  useEffect(() => {
+    const indexAssuntoInicial = assunto.findIndex(
+      (item) => item.id === idAssunto
+    );
+    setIndexDesejado(
+      indexAssuntoInicial !== -1 ? `item-${indexAssuntoInicial}` : undefined
+    );
+  }, [assunto]);
 
   const handleNewIdAssunto = async (id: string) => {
     try {
@@ -110,73 +111,79 @@ export function Aulas() {
       <div className="w-[25%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
-          <Accordion
-            type="single"
-            collapsible
-            defaultValue={activeItem}
-            // defaultValue={`item-${indexDesejado}`}
-          >
-            {/* defaultValue={`item-${indexx ?? 'default'}`} */}
-            {assunto.map((item, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                onClick={() => handleNewIdAssunto(item.id)}
-              >
-                <AccordionTrigger>
-                  <div className="w-full flex justify-center items-center cursor-pointer font-semibold">
-                    {item.name}
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col bg-white p-2 gap-2">
-                    {aula.map((item, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleNewIdVideoAula(index)}
-                        className="w-full flex items-center rounded-lg h-full cursor-pointer"
-                      >
-                        {item?.aula?.title && (
-                          <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg">
-                            <img src={iconAula} className="w-6 h-6" />
-                            <div className="w-full flex flex-row justify-between items-center">
-                              <h1
-                                className={`ml-2 font-semibold text-base ${
-                                  item?.aula?.id === videoAula?.id
-                                    ? "text-azul_claro-foreground"
-                                    : "text-cinza_escuro-foreground"
-                                }`}
-                              >
-                                {item?.aula?.title}
-                              </h1>
-                              {/* <ChevronRight className="w-6 h-6 text-azul_claro mr-2" /> */}
+          {indexDesejado && (
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue={indexDesejado}
+              // defaultValue={`item-${indexAssuntoInicial}`}
+            >
+              {/* defaultValue={`item-${indexx ?? 'default'}`} */}
+              {assunto.map((item, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  onClick={() => handleNewIdAssunto(item.id)}
+                >
+                  <AccordionTrigger>
+                    <div className="w-full flex justify-center items-center cursor-pointer font-semibold">
+                      {item.name}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-col bg-white gap-2">
+                      {aula.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleNewIdVideoAula(index)}
+                          className="w-full flex items-center rounded-lg h-full cursor-pointer pt-1"
+                        >
+                          {item?.aula?.title && (
+                            <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg px-2">
+                              <img src={iconAula} className="w-5 h-5" />
+                              <div className="pl-2 pr-2">
+                                <p
+                                  className={`font-semibold text-center text-sm ${
+                                    item?.aula?.id === videoAula?.id
+                                      ? "text-azul_claro-foreground"
+                                      : "text-cinza_escuro-foreground"
+                                  }`}
+                                >
+                                  {item?.aula?.title}
+                                </p>
+                              </div>
+                              <div>
+                                <ChevronRight className="w-5 h-5 text-azul_claro" />
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {item?.atividade?.title && (
-                          <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg">
-                            <img src={iconAtividade} className="w-6 h-6" />
-                            <div className="w-full flex flex-row justify-between items-center">
-                              <h1
-                                className={`ml-2 font-semibold text-base ${
-                                  item?.aula?.id === videoAula?.id
-                                    ? "text-azul_claro-foreground"
-                                    : "text-cinza_escuro-foreground"
-                                }`}
-                              >
-                                {item?.atividade?.title}
-                              </h1>
-                              {/* <ChevronRight className="w-6 h-6 text-azul_claro mr-2" /> */}
+                          )}
+                          {item?.atividade?.title && (
+                            <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg px-2">
+                              <img src={iconAtividade} className="w-5 h-5" />
+                              <div className="pl-2 pr-2">
+                                <p
+                                  className={`font-semibold text-center text-sm ${
+                                    item?.aula?.id === videoAula?.id
+                                      ? "text-azul_claro-foreground"
+                                      : "text-cinza_escuro-foreground"
+                                  }`}
+                                >
+                                  {item?.atividade?.title}
+                                </p>
+                              </div>
+                              <div>
+                                <ChevronRight className="w-5 h-5 text-azul_claro" />
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </div>
       </div>
       <div className="w-full flex flex-col items-start">
@@ -194,7 +201,6 @@ export function Aulas() {
               <a
                 href={`/disciplinas/${disciplina?.id}/assunto/${conteudo?.id}/conteudo`}
               >
-                {/* {conteudo?.name} */}
                 {newTitleConteudo}
               </a>
             </h1>
@@ -209,8 +215,8 @@ export function Aulas() {
         <div className="w-full h-full flex items-start justify-center relative">
           <div className="border-2 border-solid border-blue-600 object-cover relative">
             <ReactPlayer
-              width="700px"
-              height="400px"
+              // width="700px"
+              // height="400px"
               controls={true}
               playing
               loop
