@@ -233,33 +233,7 @@ export function Aulas() {
               </button>
             </div>
           )}
-          {atividade && (
-            <div className="w-full h-full flex flex-col items-center justify-between bg-blue-600 rounded-xl p-6">
-              <div className="w-full bg-azul_claro_2 rounded-xl p-6 font-bold text-lg text-justify text-foreground">
-                1 . Considerando que as ondas de calor chegam na região sul do
-                país começando por florianópolis e se movendo sempre para a
-                cidade mais populosa à sua direita, qual será a primeira e a
-                última cidade pela qual a onda passará após florianópolis?
-              </div>
-              <div className="w-full flex flex-col items-center gap-8">
-                <div className="w-full bg-white rounded-xl p-3 font-medium text-lg text-foreground">
-                  Opção 1
-                </div>
-                <div className="w-full bg-white rounded-xl p-3 font-medium text-lg text-foreground">
-                  Opção 2
-                </div>
-                <div className="w-full bg-white rounded-xl p-3 font-medium text-lg text-foreground">
-                  Opção 3
-                </div>
-                <div className="w-full bg-white rounded-xl p-3 font-medium text-lg text-foreground">
-                  Opção 4
-                </div>
-              </div>
-              <div className="w-full bg-azul_escuro rounded-xl p-4 font-semibold text-lg text-center text-white">
-                Próxima questão
-              </div>
-            </div>
-          )}
+          {atividade && <Atividade id={atividade?.id} />}
         </div>
       </div>
 
