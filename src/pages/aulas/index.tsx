@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
-import { AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
+import { AtividadeDTO, AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import { Tabs } from "@/components/tab";
@@ -19,6 +19,7 @@ import {
 import iconAula from "../../assets/icons/mini/Ícone Aula Mini.png";
 import iconAtividade from "../../assets/icons/mini/Ícone Atividade Mini.png";
 import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
+import { Atividade } from "@/components/atividade";
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
@@ -29,17 +30,16 @@ export function Aulas() {
   const [aula, setAula] = useState<AulaDTO[]>([]);
 
   const [videoAula, setVideoAula] = useState<VideoAulaDTO | null>(null);
+  const [atividade, setAtividade] = useState<AtividadeDTO | null>(null);
   const [titleConteudo, setTitleConteudo] = useState("");
   const [newTitleConteudo, setNewTitleConteudo] = useState("");
-  // const [atividade, setAtividade] = useState<AtividadeDTO | string>();
   const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
+  const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
 
   const [favoritado, setFavoritado] = useState(false);
   const handleFavoritar = () => {
     setFavoritado(!favoritado);
   };
-
-  const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
 
   const getAssunto = async () => {
     try {
@@ -60,6 +60,9 @@ export function Aulas() {
       if (numIndex !== undefined) {
         setVideoAula(
           res.data.conteudo["array_conteudos"][Number(numIndex)].aula
+        );
+        setAtividade(
+          res.data.conteudo["array_conteudos"][Number(numIndex)].atividade
         );
       }
       setDisciplina(res.data.conteudo["disciplina"]);
@@ -100,25 +103,20 @@ export function Aulas() {
     if (aula[index].aula) {
       setVideoAula(aula[index].aula);
       setNewTitleConteudo(titleConteudo);
+      setAtividade(null);
     } else if (aula[index].atividade) {
-      // setAtividade(aula[index].atividade.thumb);
+      setAtividade(aula[index].atividade);
+      setVideoAula(null);
     }
   };
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
-      {/* Side content */}
       <div className="w-[25%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
           {indexDesejado && (
-            <Accordion
-              type="single"
-              collapsible
-              defaultValue={indexDesejado}
-              // defaultValue={`item-${indexAssuntoInicial}`}
-            >
-              {/* defaultValue={`item-${indexx ?? 'default'}`} */}
+            <Accordion type="single" collapsible defaultValue={indexDesejado}>
               {assunto.map((item, index) => (
                 <AccordionItem
                   key={index}
@@ -163,7 +161,7 @@ export function Aulas() {
                               <div className="pl-2 pr-2">
                                 <p
                                   className={`font-semibold text-center text-sm ${
-                                    item?.aula?.id === videoAula?.id
+                                    item?.atividade?.id === atividade?.id
                                       ? "text-azul_claro-foreground"
                                       : "text-cinza_escuro-foreground"
                                   }`}
@@ -209,29 +207,33 @@ export function Aulas() {
             </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
               {videoAula?.title}
+              {atividade?.title}
             </h1>
           </div>
         </div>
-        <div className="w-full h-full flex items-start justify-center relative">
-          <div className="border-2 border-solid border-blue-600 object-cover relative">
-            <ReactPlayer
-              // width="700px"
-              // height="400px"
-              controls={true}
-              playing
-              loop
-              url={videoAula?.file}
-            />
-            <button
-              className="w-1/6 absolute top-4 right-4 flex flex-row items-center justify-evenly bg-white text-cinza_escuro border-2 border-solid border-blue-600 py-1 rounded-3xl"
-              onClick={handleFavoritar}
-            >
-              <div className="text-blue-600 text-xl font-bold">
-                {favoritado ? <MdOutlineStar /> : <MdOutlineStarBorder />}
-              </div>
-              <h1 className="text-sm font-bold">Favoritar</h1>
-            </button>
-          </div>
+        <div className="w-full h-full flex items-start justify-center">
+          {videoAula && (
+            <div className="border-2 border-solid border-blue-600 object-cover relative">
+              <ReactPlayer
+                width="100%"
+                height="100%"
+                controls={true}
+                playing
+                loop
+                url={videoAula?.file}
+              />
+              <button
+                className="w-1/6 absolute top-4 right-4 flex flex-row items-center justify-evenly bg-white text-cinza_escuro border-2 border-solid border-blue-600 py-1 rounded-3xl"
+                onClick={handleFavoritar}
+              >
+                <div className="text-blue-600 text-xl font-bold">
+                  {favoritado ? <MdOutlineStar /> : <MdOutlineStarBorder />}
+                </div>
+                <h1 className="text-sm font-bold">Favoritar</h1>
+              </button>
+            </div>
+          )}
+          {atividade && <Atividade id={atividade?.id} />}
         </div>
       </div>
 
