@@ -5,32 +5,41 @@ import ReactPlayer from "react-player";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
-// import { AulaDTO } from "@/DTO/AulaDTO";
+import { AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import { Tabs } from "@/components/tab";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+import iconAula from "../../assets/icons/mini/Ícone Aula Mini.png";
+import iconAtividade from "../../assets/icons/mini/Ícone Atividade Mini.png";
+import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
-  const { idDisc, idAssunto } = useParams();
+  const { idDisc, idAssunto, numIndex } = useParams();
 
   const [assunto, setAssunto] = useState<AssuntoDTO[]>([]);
-  const [conteudo, setConteudo] = useState<ConteudoDTO | null>(null);
-  // const [aula, setAula] = useState<AulaDTO[]>([]);
+  const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
+  const [aula, setAula] = useState<AulaDTO[]>([]);
 
-  // const [firstAula, setFirstAula] = useState("");
-  const [nameDisciplina, setNameDisciplina] = useState();
-  // const [nameConteudo, setNameConteudo] = useState("");
-  // const [idBimestre, setIdBimestre] = useState();
-  // const [idProfessor, setIdProfessor] = useState();
-  // const [nomeProfessor, setNomeProfessor] = useState();
-  // const [firstVideoTitle, setFirstVideoTitle] = useState("");
+  const [videoAula, setVideoAula] = useState<VideoAulaDTO | null>(null);
+  const [titleConteudo, setTitleConteudo] = useState("");
+  const [newTitleConteudo, setNewTitleConteudo] = useState("");
+  // const [atividade, setAtividade] = useState<AtividadeDTO | string>();
+  const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
 
   const [favoritado, setFavoritado] = useState(false);
   const handleFavoritar = () => {
     setFavoritado(!favoritado);
-    console.log("Botão Favoritar clicado");
   };
+
+  const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
 
   const getAssunto = async () => {
     try {
@@ -46,9 +55,14 @@ export function Aulas() {
     try {
       const res = await api.get(`/conteudos/${idAssunto}/${user?.id}`);
       setConteudo(res.data["conteudo"]);
-      // setAula(res.data.conteudo["array_conteudos"]);
-      // setFirstAula(res.data.conteudo["first_aula"]);
-      setNameDisciplina(res.data.conteudo["disciplina"].name);
+      setAula(res.data.conteudo["array_conteudos"]);
+      setNewTitleConteudo(res.data["conteudo"].name);
+      if (numIndex !== undefined) {
+        setVideoAula(
+          res.data.conteudo["array_conteudos"][Number(numIndex)].aula
+        );
+      }
+      setDisciplina(res.data.conteudo["disciplina"]);
     } catch (error) {
       console.log(error);
       throw error;
@@ -56,62 +70,157 @@ export function Aulas() {
   };
 
   useEffect(() => {
-    getConteudos();
     getAssunto();
+    getConteudos();
   }, []);
+
+  useEffect(() => {
+    const indexAssuntoInicial = assunto.findIndex(
+      (item) => item.id === idAssunto
+    );
+    setIndexDesejado(
+      indexAssuntoInicial !== -1 ? `item-${indexAssuntoInicial}` : undefined
+    );
+  }, [assunto]);
+
+  const handleNewIdAssunto = async (id: string) => {
+    try {
+      const res = await api.get(`/conteudos/${id}/${user?.id}`);
+      setConteudo(res.data["conteudo"]);
+      setTitleConteudo(res.data["conteudo"].name);
+      setAula(res.data.conteudo["array_conteudos"]);
+      setDisciplina(res.data.conteudo["disciplina"]);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleNewIdVideoAula = async (index: number) => {
+    if (aula[index].aula) {
+      setVideoAula(aula[index].aula);
+      setNewTitleConteudo(titleConteudo);
+    } else if (aula[index].atividade) {
+      // setAtividade(aula[index].atividade.thumb);
+    }
+  };
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
       {/* Side content */}
       <div className="w-[25%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
-        <div className="w-full max-h-[80vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
-          {assunto.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="w-full flex flex-row justify-between items-center cursor-pointer mb-6"
-              >
-                <h1 className="text-azul_claro-foreground font-semibold text-md">
-                  {item.name}
-                </h1>
-                <div className="w-6 h-6   ">
-                  <ChevronRight className="text-azul_claro" />
-                </div>
-              </div>
-            );
-          })}
+        <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
+          {indexDesejado && (
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue={indexDesejado}
+              // defaultValue={`item-${indexAssuntoInicial}`}
+            >
+              {/* defaultValue={`item-${indexx ?? 'default'}`} */}
+              {assunto.map((item, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  onClick={() => handleNewIdAssunto(item.id)}
+                >
+                  <AccordionTrigger>
+                    <div className="w-full flex justify-center items-center cursor-pointer font-semibold">
+                      {item.name}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-col bg-white gap-2">
+                      {aula.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleNewIdVideoAula(index)}
+                          className="w-full flex items-center rounded-lg h-full cursor-pointer pt-1"
+                        >
+                          {item?.aula?.title && (
+                            <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg px-2">
+                              <img src={iconAula} className="w-5 h-5" />
+                              <div className="pl-2 pr-2">
+                                <p
+                                  className={`font-semibold text-center text-sm ${
+                                    item?.aula?.id === videoAula?.id
+                                      ? "text-azul_claro-foreground"
+                                      : "text-cinza_escuro-foreground"
+                                  }`}
+                                >
+                                  {item?.aula?.title}
+                                </p>
+                              </div>
+                              <div>
+                                <ChevronRight className="w-5 h-5 text-azul_claro" />
+                              </div>
+                            </div>
+                          )}
+                          {item?.atividade?.title && (
+                            <div className="w-full flex flex-row justify-between items-center hover:bg-azul_azul_select rounded-lg px-2">
+                              <img src={iconAtividade} className="w-5 h-5" />
+                              <div className="pl-2 pr-2">
+                                <p
+                                  className={`font-semibold text-center text-sm ${
+                                    item?.aula?.id === videoAula?.id
+                                      ? "text-azul_claro-foreground"
+                                      : "text-cinza_escuro-foreground"
+                                  }`}
+                                >
+                                  {item?.atividade?.title}
+                                </p>
+                              </div>
+                              <div>
+                                <ChevronRight className="w-5 h-5 text-azul_claro" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </div>
       </div>
       <div className="w-full flex flex-col items-start">
         <div className="flex items-center mb-4">
           <div className="flex flex-row">
+            <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+              <a href={`/disciplinas/${disciplina?.id}/assunto`}>
+                {disciplina?.name}
+              </a>
+            </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
-              {nameDisciplina}
+              <ChevronRight />
+            </h1>
+            <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+              <a
+                href={`/disciplinas/${disciplina?.id}/assunto/${conteudo?.id}/conteudo`}
+              >
+                {newTitleConteudo}
+              </a>
             </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
               <ChevronRight />
             </h1>
             <h1 className="text-blue-600 text-xl font-medium mb-2">
-              {conteudo?.name}
-            </h1>
-            <h1 className="text-blue-600 text-xl font-medium mb-2">
-              <ChevronRight />
-            </h1>
-            <h1 className="text-blue-600 text-xl font-medium mb-2">
-              Nome da aula
+              {videoAula?.title}
             </h1>
           </div>
         </div>
         <div className="w-full h-full flex items-start justify-center relative">
           <div className="border-2 border-solid border-blue-600 object-cover relative">
             <ReactPlayer
-              width="700px"
-              height="400px"
+              // width="700px"
+              // height="400px"
               controls={true}
               playing
               loop
-              url="https://cdn.jmvstream.com/vod/vod_11696/f/i1ufkp132v5a501/h/4/playlist.m3u8"
+              url={videoAula?.file}
             />
             <button
               className="w-1/6 absolute top-4 right-4 flex flex-row items-center justify-evenly bg-white text-cinza_escuro border-2 border-solid border-blue-600 py-1 rounded-3xl"
@@ -127,7 +236,7 @@ export function Aulas() {
       </div>
 
       <div className="w-[30%]">
-        <Tabs/>
+        <Tabs />
       </div>
     </div>
   );

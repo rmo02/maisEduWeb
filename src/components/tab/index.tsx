@@ -29,7 +29,7 @@ export function Tabs() {
             className={`cursor-pointer ${
               activeTab === index
                 ? "active text-blue-600 text-lg font-bold"
-                : "text-cinza_escura text-lg font-medium"
+                : "text-cinza_escura hover:text-azul_claro_2 text-lg font-medium"
             }`}
             onClick={() => handleTabClick(index)}
           >

@@ -1,5 +1,5 @@
 import { AulaDTO } from "./AulaDTO";
-import { DisciplinaDTO } from "./DisciplinaDTO";
+import { DisciplinaDTO } from "./DisciplinasDTO";
 
 export type ConteudoDTO = {
   array_conteudos: AulaDTO[];
@@ -20,4 +20,8 @@ export type ConteudoDTO = {
   professor: string;
   status: boolean;
   updated_at: string;
+};
+
+export type ConteudosDTO = {
+  conteudo: ConteudoDTO;
 };

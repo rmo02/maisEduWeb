@@ -1,22 +1,22 @@
 import { AulaDTO } from "@/DTO/AulaDTO";
-import { DisciplinaDTO } from "@/DTO/DisciplinaDTO";
 import { api } from "@/api/app";
 import { AuthContext } from "@/context/AuthContext";
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import iconAtividade from "../../assets/icons/Ícone Atividade.png";
-import iconAula from "../../assets/icons/Ícone Aula.png";
+import iconAtividade from "../../assets/icons/normal/Ícone Atividade.png";
+import iconAula from "../../assets/icons/normal/Ícone Aula.png";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { Tabs } from "@/components/tab";
+import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 
 export function Conteudo() {
   const { user } = useContext(AuthContext);
   const { idDisc, idAssunto } = useParams();
 
-  const [disciplina, setDisciplina] = useState<DisciplinaDTO | null>(null);
+  const [disciplina, setDisciplina] = useState<DisciplinaDTO | null>();
   const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
-  const [aula, setAula] = useState<AulaDTO[]>([])
+  const [aula, setAula] = useState<AulaDTO[]>([]);
 
   const getAssunto = async () => {
     try {
@@ -28,6 +28,7 @@ export function Conteudo() {
       throw error;
     }
   };
+
   const getDisciplinas = async () => {
     try {
       const res = await api.get(`/disciplinas/${idDisc}`);
@@ -43,14 +44,14 @@ export function Conteudo() {
     getDisciplinas();
   }, []);
 
-  console.log('conteudo',conteudo);
-
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
       <div className="flex flex-col w-full">
         <div className="flex flex-row">
-          <h1 className="text-blue-600 text-xl font-medium mb-2">
-            {disciplina?.name}
+          <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
+            <a href={`/disciplinas/${disciplina?.id}/assunto`}>
+              {disciplina?.name}
+            </a>
           </h1>
           <h1 className="text-blue-600 text-xl font-medium mb-2">
             <ChevronRight />
@@ -62,10 +63,9 @@ export function Conteudo() {
 
         <div className="flex flex-col bg-white p-6 rounded-xl gap-2">
           {aula.map((item, index) => {
-            console.log(item);
             return (
               <a
-                href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/${conteudo?.id}/aula`}
+                href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/${conteudo?.id}/aula/${index}`}
                 key={index}
               >
                 <div className="w-full flex items-center rounded-lg h-10 cursor-pointer mb-4 p-4">

@@ -60,7 +60,7 @@ export function Home() {
             <div className="flex justify-between items-center">
               <h1 className="text-blue-600 text-xl font-medium">Turmas</h1>
               <span className="text-zinc-600 text-sm underline cursor-pointer">
-                <a href="/disciplina">Todas as turmas</a>
+                <a href="/disciplinas">Todas as turmas</a>
               </span>
             </div>
 
@@ -71,7 +71,7 @@ export function Home() {
                     <a href={`/disciplinas/${item.disciplina.id}/assunto`}>
                       <img
                         src={item.disciplina.bk_img}
-                        className="w-full h-full rounded-md"
+                        className="w-full h-full rounded-md hover:scale-105 duration-300 ease-in-out"
                       />
                     </a>
                   </div>
@@ -84,7 +84,7 @@ export function Home() {
             <div className="w-full flex justify-between mt-0 items-center">
               <h1 className="text-lg text-[#00B7B7]">Meu progresso</h1>
               <span className="text-zinc-600 text-sm underline cursor-pointer">
-                Todas as turmas
+                <a href="/disciplinas">Todas as turmas</a>
               </span>
             </div>
             <div className="w-full h-full flex flex-col mt-6 gap-6">

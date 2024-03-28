@@ -49,7 +49,7 @@ export function CriarLembrete() {
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className="w-full flex items-center justify-center mt-3 rounded-lg bg-azul_verde hover:opacity-70 h-12 text-white"
+            className="w-full flex items-center justify-center mt-3 rounded-lg bg-azul_verde hover:opacity-70 h-[6vh] text-white"
             variant={null}
           >
             Novo Lembrete
