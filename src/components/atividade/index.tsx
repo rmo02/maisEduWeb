@@ -64,22 +64,25 @@ export function Atividade({ id }: { id: string | undefined }) {
 
   // Função para avançar para a próxima questão
   const handleNextQuestion = () => {
-    // Calcula o número da próxima questão
-    const numberQuestion = currentQuestion + 1;
-    // Reseta a resposta selecionada para null
-    setRespostaSelecionada(null);
-    // Verifica se ainda há mais questões a serem exibidas
-    if (questoes && numberQuestion < questoes?.length) {
-      // Se houver, atualiza o estado para mostrar a próxima questão
-      setCurrentQuestion(numberQuestion);
-    } else {
-      // Se não houver mais questões, exibe a pontuação final
-      setShowScore(true);
+    // Verifica se alguma resposta foi selecionada
+    if (respostaSelecionada !== null) {
+      // Calcula o número da próxima questão
+      const numberQuestion = currentQuestion + 1;
+      // Reseta a resposta selecionada para null
+      setRespostaSelecionada(null);
+      // Verifica se ainda há mais questões a serem exibidas
+      if (questoes && numberQuestion < questoes?.length) {
+        // Se houver, atualiza o estado para mostrar a próxima questão
+        setCurrentQuestion(numberQuestion);
+      } else {
+        // Se não houver mais questões, exibe a pontuação final
+        setShowScore(true);
+      }
     }
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center select-none">
       {showScore ? (
         // Se showScore for verdadeiro, exibe a pontuação final
         <div className="w-1/2 h-1/2 flex flex-col items-center justify-evenly bg-blue-600 rounded-xl p-4">
@@ -98,11 +101,11 @@ export function Atividade({ id }: { id: string | undefined }) {
       ) : (
         // Se showScore for falso, exibe a próxima questão
         <div className="w-full h-full flex flex-col bg-blue-600 rounded-xl p-4 gap-4">
-          <div className="font-bold text-lg text-justify text-background select-none">
+          <div className="font-bold text-lg text-justify text-background">
             Questão {currentQuestion + 1} de {questoes?.length}
           </div>
           <div className="w-full h-full flex flex-col justify-between">
-            <div className="w-full bg-azul_claro_2 rounded-xl p-6 font-bold text-lg text-justify text-foreground select-none">
+            <div className="w-full bg-azul_claro_2 rounded-xl p-5 font-bold text-lg text-justify text-foreground">
               {questoes?.[currentQuestion]?.title}
             </div>
             <div className="w-full flex flex-col items-center gap-4">
@@ -112,12 +115,12 @@ export function Atividade({ id }: { id: string | undefined }) {
                   return (
                     <div
                       key={index}
-                      className={`w-full bg-background rounded-xl p-3 font-medium text-lg text-foreground cursor-pointer ${
+                      className={`w-full bg-background hover:bg-blue-200 shadow-md rounded-xl p-3 font-medium text-lg text-foreground cursor-pointer ${
                         respostaSelecionada !== null
                           ? isRespostaCorreta(index)
-                            ? "border-green-600 border-2 bg-green-400 shadow-md"
+                            ? "border-green-600 border-2 bg-green-400 shadow-md hover:bg-green-400" //Se a resposta está correta, altera para a estilização para verde
                             : index === respostaSelecionada
-                            ? "border-red-600 border-2 bg-red-400 shadow-md"
+                            ? "border-red-600 border-2 bg-red-400 shadow-md hover:bg-red-400" //Se a resposta está errada, altera para a estilização para vermelho
                             : ""
                           : ""
                       }`}
@@ -129,7 +132,11 @@ export function Atividade({ id }: { id: string | undefined }) {
                 })}
             </div>
             <div
-              className="w-full bg-azul_escuro rounded-xl p-4 font-semibold text-lg text-center text-white cursor-pointer"
+              className={`w-full bg-azul_escuro hover:bg-blue-800 shadow-lg rounded-xl p-3 font-semibold text-lg text-center text-white ${
+                respostaSelecionada !== null
+                  ? "cursor-pointer"
+                  : "cursor-not-allowed"
+              }`}
               onClick={() => handleNextQuestion()}
             >
               Próxima questão
