@@ -38,7 +38,7 @@ export function Assunto() {
   }, []);
 
   return (
-    <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
+    <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
       <div className="flex flex-col w-full">
         <h1 className="text-blue-600 text-xl font-medium mb-2">
           {disciplina?.name}

@@ -112,7 +112,7 @@ export function Aulas() {
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
-      <div className="w-[25%] flex flex-col">
+      <div className="w-[30%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
           {indexDesejado && (
@@ -236,7 +236,6 @@ export function Aulas() {
           {atividade && <Atividade id={atividade?.id} />}
         </div>
       </div>
-
       <div className="w-[30%]">
         <Tabs />
       </div>

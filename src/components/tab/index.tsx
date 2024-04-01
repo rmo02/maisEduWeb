@@ -22,7 +22,7 @@ export function Tabs() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex flex-row justify-between items-start ">
+      <div className="flex flex-row justify-between items-start ">
         {tabs.map((tab, index) => (
           <div
             key={index}

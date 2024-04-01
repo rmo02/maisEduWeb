@@ -7,10 +7,11 @@ export function Atividade({ id }: { id: string | undefined }) {
   const [currentQuestion, setCurrentQuestion] = useState(0); //Questão atual
   const [showScore, setShowScore] = useState(false); // Controla se a pontuação deve ser exibida
   const [score, setScore] = useState(0); // Contador da pontuação
-
   const [respostaSelecionada, setRespostaSelecionada] = useState<number | null>(
     null
   );
+  const [progressWidth, setProgressWidth] = useState(0);
+
   // Função para obter as questões da API com base no ID da atividade
   const getAtividade = async () => {
     try {
@@ -35,6 +36,14 @@ export function Atividade({ id }: { id: string | undefined }) {
     }
   }, [id]);
 
+  // Efeito para "contar" o tamanho da barra de progresso
+  useEffect(() => {
+    if (questoes) {
+      const width = ((currentQuestion + 1) / questoes?.length) * 100;
+      setProgressWidth(width);
+    }
+  }, [currentQuestion, questoes]);
+
   // Função para lidar com a seleção de uma opção de resposta
   const handleAnswerOptions = (index: number) => {
     // Verifica se uma resposta já foi selecionada
@@ -55,6 +64,8 @@ export function Atividade({ id }: { id: string | undefined }) {
   // Função para verificar se uma resposta é correta com base no índice da opção
   const isRespostaCorreta = (index: number) => {
     return (
+      respostaSelecionada !== null &&
+      index === respostaSelecionada &&
       questoes &&
       questoes[currentQuestion]?.opcoes &&
       questoes[currentQuestion].opcoes[index] ===
@@ -90,7 +101,7 @@ export function Atividade({ id }: { id: string | undefined }) {
             Você acertou {score} de {questoes?.length}!
           </div>
           <div
-            className="w-full bg-background rounded-xl p-3 font-medium text-lg text-center text-foreground cursor-pointer"
+            className="w-full bg-background hover:bg-blue-200 rounded-xl shadow-md  p-3 font-medium text-lg text-center text-foreground cursor-pointer"
             onClick={() => {
               window.location.reload();
             }}
@@ -101,6 +112,14 @@ export function Atividade({ id }: { id: string | undefined }) {
       ) : (
         // Se showScore for falso, exibe a próxima questão
         <div className="w-full h-full flex flex-col bg-blue-600 rounded-xl p-4 gap-4">
+          <div
+            className={`w-full bg-azul_muito_muito_claro rounded-full h-1.5`}
+          >
+            <div
+              style={{ width: `${progressWidth}%` }}
+              className={`bg-green-500 h-1.5 rounded-full`}
+            ></div>
+          </div>
           <div className="font-bold text-lg text-justify text-background">
             Questão {currentQuestion + 1} de {questoes?.length}
           </div>
@@ -123,7 +142,8 @@ export function Atividade({ id }: { id: string | undefined }) {
                             ? "border-red-600 border-2 bg-red-400 shadow-md hover:bg-red-400" //Se a resposta está errada, altera para a estilização para vermelho
                             : ""
                           : ""
-                      }`}
+                      }
+                      `}
                       onClick={() => handleAnswerOptions(index)}
                     >
                       {item}
