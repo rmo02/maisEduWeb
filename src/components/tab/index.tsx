@@ -37,7 +37,7 @@ export function Tabs() {
           </div>
         ))}
       </div>
-      <div className="tab-content">{tabs[activeTab].component}</div>
+      <div className="tab-content py-2">{tabs[activeTab].component}</div>
     </div>
   );
 }
