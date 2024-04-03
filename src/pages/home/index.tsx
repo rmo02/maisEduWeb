@@ -6,11 +6,12 @@ import { Label } from "@/components/ui/label";
 import { AuthContext } from "@/context/AuthContext";
 import { DisciplinasDTO } from "@/DTO/DisciplinasDTO";
 import { Tabs } from "@/components/tab";
+import { UltimasAulasDTO } from "@/DTO/UltimasAulasDTO";
 
 export function Home() {
   const { user } = useContext(AuthContext);
-  const [ultimasAulas, setUltimasAulas] = useState([]);
-  const [favoritos, setFavoritos] = useState([]);
+  const [ultimasAulas, setUltimasAulas] = useState<UltimasAulasDTO[]>([]);
+  // const [favoritos, setFavoritos] = useState([]);
   const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
   const getMaterias = async () => {
@@ -32,19 +33,19 @@ export function Home() {
     }
   };
 
-  const getAulasFavoritadas = async () => {
-    try {
-      const res = await api.get(`/favoritos/${user?.id}`);
-      setFavoritos(res.data["favoritos"]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getAulasFavoritadas = async () => {
+  //   try {
+  //     const res = await api.get(`/favoritos/${user?.id}`);
+  //     setFavoritos(res.data["favoritos"]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     getMaterias();
     getVistoPorUltimo();
-    getAulasFavoritadas();
+    // getAulasFavoritadas();
   }, []);
 
   return (
@@ -118,18 +119,23 @@ export function Home() {
           <div className="w-[40%]">
             <h1 className="text-blue-600 font-medium text-xl">Últimas aulas</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5">
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
+              {/* Limitando as últimas aulas em 4 */}
+              {ultimasAulas.slice(0, 4).map((item, index) => {
+                console.log(item);
+                return (
+                  <div key={index} className="col-span-1 cursor-pointer">
+                    <a
+                      href={`/disciplinas/370cfa26-fd05-4c90-92c1-e06cfeda3669/assunto/110fe00c-3bb3-4b53-8b75-41b4f1a5fff3/conteudo/${item?.id}/aula/0`}
+                    >
+                      {/* /disciplinas/${idAssunto}/assunto/${idConteudo}/conteudo/110fe00c-3bb3-4b53-8b75-41b4f1a5fff3/aula/0 */}
+                      <img
+                        src={item?.thumb}
+                        className="w-full h-full rounded-md hover:scale-105 duration-300 ease-in-out"
+                      />
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="flex flex-col bg-white w-full sm:w-1/2 md:w-3/5 lg:w-3/5 rounded-xl p-4 shadow-md shadow-[#4264eb86]">

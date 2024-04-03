@@ -7,12 +7,12 @@ export function Tabs() {
 
   const tabs = [
     {
-      name: "Calendário",
-      component: <Calendario />,
-    },
-    {
       name: "Anotações",
       component: <Anotacoes />,
+    },
+    {
+      name: "Calendário",
+      component: <Calendario />,
     },
   ];
 

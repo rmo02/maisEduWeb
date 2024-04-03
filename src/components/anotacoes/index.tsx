@@ -11,17 +11,15 @@ export function Anotacoes() {
   const [descricaoEditada, setDescricaoEditada] = useState("");
   const [notas, setNotas] = useState<NotaDTO[]>([]);
 
-  useEffect(() => {
-    const getAnotacoes = async () => {
-      try {
-        const res = await api.get(`/anotacoesByAluno/${user?.id}`);
-        setNotas(res.data["anotacoes"]);
-      } catch (error) {
-        throw error;
-      }
-    };
-    getAnotacoes();
-  }, []);
+  const getAnotacoes = async () => {
+    try {
+      const res = await api.get(`/anotacoesByAluno/${user?.id}`);
+      setNotas(res.data["anotacoes"]);
+    } catch (error) {
+      setNotas([]);
+      throw error;
+    }
+  };
 
   const criarNota = async (descricao: string) => {
     if (descricao.length > 0) {
@@ -32,12 +30,12 @@ export function Anotacoes() {
           array_tags: "tags",
         });
         if (res.status === 201) {
-          console.log(res.status);
+          getAnotacoes();
+          setDescricao("");
         }
-        document.location.reload();
         alert("Anotação criada!");
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     }
   };
@@ -50,13 +48,13 @@ export function Anotacoes() {
           id_aluno: `${user?.id}`,
           array_tags: "tags",
         });
-        if (res.status === 201) {
-          console.log(res.status);
+        if (res.status === 200) {
+          getAnotacoes();
+          setEditandoIndex(null);
         }
-        document.location.reload();
         alert("Anotação editada!");
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     }
   };
@@ -82,15 +80,18 @@ export function Anotacoes() {
   const delAnotacoes = async (id: string) => {
     try {
       const res = await api.delete(`/anotacoes/${id}`);
-      if (res.status === 201) {
-        console.log(res.status);
+      if (res.status === 204) {
+        getAnotacoes();
       }
-      document.location.reload();
       alert("Anotação apagada!");
     } catch (error) {
       throw error;
     }
   };
+
+  useEffect(() => {
+    getAnotacoes();
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -98,14 +99,15 @@ export function Anotacoes() {
         <textarea
           required
           placeholder="Escreva sua nova anotação aqui"
+          value={descricao}
           onChange={(e) => {
             setDescricao(e.target.value);
           }}
-          className="w-full h-24 placeholder-blue-600 placeholder:text-sm text-lg rounded-lg outline-none p-2 scrollbar-thin resize-none"
+          className="w-full h-24 placeholder-blue-600 placeholder:text-sm text-base rounded-lg outline-none p-2 scrollbar-thin resize-none"
         />
-        <div className="w-full flex items-center justify-center mt-2 px-4">
+        <div className="w-full flex items-center justify-center mt-2">
           <Button
-            className={`w-full h-[6vh] rounded-lg bg-blue-600 hover:opacity-70 text-white ${
+            className={`w-full h-[6vh] rounded-lg bg-blue-600 shadow-2xl hover:opacity-70 text-white ${
               descricao.length === 0 ? "cursor-not-allowed" : "cursor-pointer"
             }`}
             variant={null}
@@ -120,7 +122,6 @@ export function Anotacoes() {
           <ol className=" w-full flex flex-col">
             {notas.length > 0 &&
               notas.map((item, index) => {
-                console.log(item);
                 return (
                   <div
                     key={index}
@@ -138,7 +139,7 @@ export function Anotacoes() {
                         setDescricaoEditada(e.target.value);
                         setEditandoIndex(index);
                       }}
-                      className="w-full h-24 placeholder-blue-600 placeholder:text-sm text-lg rounded-lg outline-none p-2 pr-5 scrollbar-thin resize-none"
+                      className="w-full h-24 placeholder-blue-600 placeholder:text-sm text-base rounded-lg outline-none p-2 pr-6 scrollbar-thin resize-none"
                     />
 
                     <Button
@@ -153,14 +154,14 @@ export function Anotacoes() {
                     {editandoIndex === index && ( // Renderiza o botão apenas se estiver editando esta nota
                       <div className="w-full flex flex-row justify-around mt-2 h-[6vh]">
                         <Button
-                          className="w-2/5 h-full flex items-center justify-center rounded-lg bg-popover hover:opacity-70 font-semibold"
+                          className="w-2/5 h-full flex items-center justify-center rounded-lg bg-popover shadow-lg hover:opacity-70 text-sm hover:text-black font-semibold"
                           variant={null}
                           onClick={() => cancelarEdicao(index)}
                         >
                           Cancelar edição
                         </Button>
                         <Button
-                          className={`w-2/5 h-full flex items-center justify-center rounded-lg bg-blue-600 hover:opacity-70 text-white ${
+                          className={`w-2/5 h-full flex items-center justify-center rounded-lg bg-blue-600 shadow-2xl hover:opacity-70 text-sm text-white ${
                             descricaoEditada.length === 0
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
