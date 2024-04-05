@@ -11,10 +11,10 @@ import { UltimasAulasDTO } from "@/DTO/UltimasAulasDTO";
 export function Home() {
   const { user } = useContext(AuthContext);
   const [ultimasAulas, setUltimasAulas] = useState<UltimasAulasDTO[]>([]);
-  // const [favoritos, setFavoritos] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
   const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
-  const getMaterias = async () => {
+  const getDisciplinas = async () => {
     try {
       const res = await api.get(`/disciplinasAluno/${user?.id}`);
       setDisciplinas(res.data["disciplinas"]);
@@ -33,20 +33,22 @@ export function Home() {
     }
   };
 
-  // const getAulasFavoritadas = async () => {
-  //   try {
-  //     const res = await api.get(`/favoritos/${user?.id}`);
-  //     setFavoritos(res.data["favoritos"]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getAulasFavoritadas = async () => {
+    try {
+      const res = await api.get(`/favoritos/${user?.id}`);
+      setFavoritos(res.data["favoritos"]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    getMaterias();
+    getDisciplinas();
     getVistoPorUltimo();
-    // getAulasFavoritadas();
+    getAulasFavoritadas();
   }, []);
+
+  console.log(favoritos);
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
@@ -121,13 +123,11 @@ export function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5">
               {/* Limitando as últimas aulas em 4 */}
               {ultimasAulas.slice(0, 4).map((item, index) => {
-                console.log(item);
                 return (
                   <div key={index} className="col-span-1 cursor-pointer">
                     <a
-                      href={`/disciplinas/370cfa26-fd05-4c90-92c1-e06cfeda3669/assunto/110fe00c-3bb3-4b53-8b75-41b4f1a5fff3/conteudo/${item?.id}/aula/0`}
+                      href={`/disciplinas/370cfa26-fd05-4c90-92c1-e06cfeda3669/assunto/${item?.conteudo}/conteudo/aula/0`}
                     >
-                      {/* /disciplinas/${idAssunto}/assunto/${idConteudo}/conteudo/110fe00c-3bb3-4b53-8b75-41b4f1a5fff3/aula/0 */}
                       <img
                         src={item?.thumb}
                         className="w-full h-full rounded-md hover:scale-105 duration-300 ease-in-out"

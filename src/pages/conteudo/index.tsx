@@ -65,7 +65,7 @@ export function Conteudo() {
           {aula.map((item, index) => {
             return (
               <a
-                href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/${conteudo?.id}/aula/${index}`}
+                href={`/disciplinas/${idDisc}/assunto/${idAssunto}/conteudo/aula/${index}`}
                 key={index}
               >
                 <div className="w-full flex items-center rounded-lg h-10 cursor-pointer mb-4 p-4">
