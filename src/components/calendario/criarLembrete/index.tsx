@@ -11,8 +11,16 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 import { AuthContext } from "@/context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export function CriarLembrete() {
+type AtualizarLembretesType = () => void;
+
+export function CriarLembrete({
+  atualizarLembretes,
+}: {
+  atualizarLembretes: AtualizarLembretesType;
+}) {
   const { user } = useContext(AuthContext);
 
   const [titleEvent, setTitleEvent] = useState("");
@@ -20,6 +28,38 @@ export function CriarLembrete() {
   const [dataEvent, setDataEvent] = useState("");
   const [inicioDateTime, setInicioDateTime] = useState("");
   const [fimDateTime, setFimDateTime] = useState("");
+
+  const notify = (text: string, type: string) => {
+    switch (type) {
+      case "success":
+        toast.success(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      case "error":
+        toast.error(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      default:
+        toast(text); // Para o caso padrão, apenas exiba uma notificação padrão
+        break;
+    }
+  };
 
   async function enviarLembrete(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,18 +74,18 @@ export function CriarLembrete() {
         id_aluno: user?.id,
       });
       if (res.status === 201) {
-        console.log(res.status);
+        notify("Lembrete criado!", "success"); // Chamada para notificação de sucesso
+        atualizarLembretes(); // Atualiza a lista de lembretes
       }
-      document.location.reload();
-      alert("Lembrete criado!");
     } catch (error) {
-      alert("Ocorreu um erro. Tente novamente.");
+      notify("Erro ao editar lembrete. Tente novamente!", "error"); // Chamada para notificação de sucesso
       console.log("Erro ao criar lembrete. ", error);
     }
   }
 
   return (
     <div className="w-full">
+      <ToastContainer />
       <Dialog>
         <DialogTrigger asChild>
           <Button
@@ -161,13 +201,15 @@ export function CriarLembrete() {
                     Salvar
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    variant={null}
-                    className="bg-blue-600 hover:opacity-70 rounded-lg text-white w-1/5 h-[40px] ml-4"
-                  >
-                    Salvar
-                  </Button>
+                  <DialogClose asChild>
+                    <Button
+                      type="submit"
+                      variant={null}
+                      className="bg-blue-600 hover:opacity-70 rounded-lg text-white w-1/5 h-[40px] ml-4"
+                    >
+                      Salvar
+                    </Button>
+                  </DialogClose>
                 )}
               </div>
             </DialogFooter>

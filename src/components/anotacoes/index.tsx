@@ -3,6 +3,8 @@ import api from "@/api";
 import { AuthContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import { NotaDTO } from "@/DTO/NotaDTO";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Anotacoes() {
   const { user } = useContext(AuthContext);
@@ -10,6 +12,50 @@ export function Anotacoes() {
   const [editandoIndex, setEditandoIndex] = useState<number | null>(null);
   const [descricaoEditada, setDescricaoEditada] = useState("");
   const [notas, setNotas] = useState<NotaDTO[]>([]);
+
+  const notify = (text: string, type: string) => {
+    switch (type) {
+      case "success":
+        toast.success(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      case "info":
+        toast.info(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      case "error":
+        toast.error(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      default:
+        toast(text); // Para o caso padrão, apenas exiba uma notificação padrão
+        break;
+    }
+  };
 
   const getAnotacoes = async () => {
     try {
@@ -32,8 +78,8 @@ export function Anotacoes() {
         if (res.status === 201) {
           getAnotacoes();
           setDescricao("");
+          notify("Anotação criada!", "success");
         }
-        alert("Anotação criada!");
       } catch (error) {
         throw error;
       }
@@ -52,7 +98,7 @@ export function Anotacoes() {
           getAnotacoes();
           setEditandoIndex(null);
         }
-        alert("Anotação editada!");
+        notify("Anotação editada!", "info");
       } catch (error) {
         throw error;
       }
@@ -83,7 +129,7 @@ export function Anotacoes() {
       if (res.status === 204) {
         getAnotacoes();
       }
-      alert("Anotação apagada!");
+      notify("Anotação apagada!", "error"); // Chamada para notificação de sucesso
     } catch (error) {
       throw error;
     }
@@ -115,6 +161,7 @@ export function Anotacoes() {
           >
             Salvar
           </Button>
+          <ToastContainer />
         </div>
       </div>
       <section className="w-full h-[60vh] mt-3">
