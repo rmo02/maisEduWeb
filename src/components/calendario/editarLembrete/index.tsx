@@ -85,14 +85,14 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
         <DialogTrigger asChild>
           <Button className="w-full" variant={null} size={null}>
             <div className="w-full flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] px-4">
-              <p className="text-[#748FFC] text-[18px] font-bold mb-2">
+              <p className="text-[#748FFC] text-base font-bold mb-2">
                 {truncateText(lembrete.title, 25)}
               </p>
-              <p className="text-foreground text-[18px] text-left font-bold mb-2 whitespace-pre-line">
+              <p className="text-foreground text-base text-left font-bold mb-2 whitespace-pre-line">
                 {truncateText(lembrete.description, 25)}
               </p>
               <div className="flex flex-row items-center justify-between">
-                <p className="text-[#748FFC] text-[14px] font-medium ">
+                <p className="text-[#748FFC] text-sm font-medium ">
                   {lembrete.start.slice(0, 5)} - {lembrete.end.slice(0, 5)}
                 </p>
               </div>

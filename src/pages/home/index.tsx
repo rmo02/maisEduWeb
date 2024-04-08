@@ -6,14 +6,15 @@ import { Label } from "@/components/ui/label";
 import { AuthContext } from "@/context/AuthContext";
 import { DisciplinasDTO } from "@/DTO/DisciplinasDTO";
 import { Tabs } from "@/components/tab";
+import { UltimasAulasDTO } from "@/DTO/UltimasAulasDTO";
 
 export function Home() {
   const { user } = useContext(AuthContext);
-  const [ultimasAulas, setUltimasAulas] = useState([]);
+  const [ultimasAulas, setUltimasAulas] = useState<UltimasAulasDTO[]>([]);
   const [favoritos, setFavoritos] = useState([]);
   const [disciplinas, setDisciplinas] = useState<DisciplinasDTO[]>([]);
 
-  const getMaterias = async () => {
+  const getDisciplinas = async () => {
     try {
       const res = await api.get(`/disciplinasAluno/${user?.id}`);
       setDisciplinas(res.data["disciplinas"]);
@@ -42,13 +43,15 @@ export function Home() {
   };
 
   useEffect(() => {
-    getMaterias();
+    getDisciplinas();
     getVistoPorUltimo();
     getAulasFavoritadas();
   }, []);
 
+  console.log(favoritos);
+
   return (
-    <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-52 mt-4 gap-6">
+    <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
       <div className="flex flex-col w-full">
         <h1 className="text-zinc-700 text-2xl">
           Olá, <span className="text-blue-500 font-medium">{user?.name}!</span>{" "}
@@ -118,18 +121,21 @@ export function Home() {
           <div className="w-[40%]">
             <h1 className="text-blue-600 font-medium text-xl">Últimas aulas</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5">
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
-              <div className="col-span-1">
-                <img src={Fisica} />
-              </div>
+              {/* Limitando as últimas aulas em 4 */}
+              {ultimasAulas.slice(0, 4).map((item, index) => {
+                return (
+                  <div key={index} className="col-span-1 cursor-pointer">
+                    <a
+                      href={`/disciplinas/370cfa26-fd05-4c90-92c1-e06cfeda3669/assunto/${item?.conteudo}/conteudo/aula/0`}
+                    >
+                      <img
+                        src={item?.thumb}
+                        className="w-full h-full rounded-md hover:scale-105 duration-300 ease-in-out"
+                      />
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="flex flex-col bg-white w-full sm:w-1/2 md:w-3/5 lg:w-3/5 rounded-xl p-4 shadow-md shadow-[#4264eb86]">

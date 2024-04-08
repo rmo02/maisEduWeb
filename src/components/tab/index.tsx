@@ -22,7 +22,7 @@ export function Tabs() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex flex-row justify-between items-start ">
+      <div className="flex flex-row justify-between items-start ">
         {tabs.map((tab, index) => (
           <div
             key={index}
@@ -37,7 +37,7 @@ export function Tabs() {
           </div>
         ))}
       </div>
-      <div className="tab-content">{tabs[activeTab].component}</div>
+      <div className="tab-content py-2">{tabs[activeTab].component}</div>
     </div>
   );
 }

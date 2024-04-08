@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/navbar";
-import { VideoPlayer } from "@/components/videoPlayer";
 import { AuthContext } from "@/context/AuthContext";
 import { Aulas } from "@/pages/aulas";
 import { Chat } from "@/pages/chat";
@@ -31,12 +30,11 @@ function RotasProtegidas() {
           element={<Conteudo />}
         />
         <Route
-          path="/disciplinas/:idDisc/assunto/:idAssunto/conteudo/:idConteudo/aula/:numIndex"
+          path="/disciplinas/:idDisc/assunto/:idAssunto/conteudo/aula/:numIndex"
           element={<Aulas />}
         />
         <Route path="/progresso" element={<Progresso />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/video" element={<VideoPlayer />} />
       </Routes>
     </>
   );

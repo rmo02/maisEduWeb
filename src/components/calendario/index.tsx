@@ -101,7 +101,7 @@ export function Calendario() {
               <ChevronRightIcon className="w-5 h-5" />
             </button>
           </div>
-          <div className="grid grid-cols-7 mt-2 leading-6 text-center text-[#EDF2FF] text-[12px]">
+          <div className="grid grid-cols-7 mt-2 leading-6 text-center text-[#EDF2FF] text-xs">
             <p>DOM</p>
             <p>SEG</p>
             <p>TER</p>
@@ -110,7 +110,7 @@ export function Calendario() {
             <p>SEX</p>
             <p>SAB</p>
           </div>
-          <div className="grid grid-cols-7 content-center text-[14px]">
+          <div className="grid grid-cols-7 content-center text-sm">
             {days.map((day, dayIdx) => (
               <div
                 key={day.toString()}
@@ -168,7 +168,7 @@ export function Calendario() {
           </div>
         </div>
         <section className="w-full h-[26vh] mt-3">
-          <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb pr-2">
+          <div className="h-full flex overflow-y-auto scrollbar-thin scrollbar-thumb">
             <ol className="w-full flex flex-col">
               {selectedDayLembretes.length > 0 ? (
                 selectedDayLembretes.map((lembrete) =>

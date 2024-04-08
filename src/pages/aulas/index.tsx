@@ -1,13 +1,11 @@
 import { ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import api from "@/api";
-import ReactPlayer from "react-player";
 import { ConteudoDTO } from "@/DTO/ConteudoDTO";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { AtividadeDTO, AulaDTO, VideoAulaDTO } from "@/DTO/AulaDTO";
 import { AssuntoDTO } from "@/DTO/AssuntoDTO";
-import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import { Tabs } from "@/components/tab";
 import {
   Accordion,
@@ -20,6 +18,8 @@ import iconAula from "../../assets/icons/mini/Ícone Aula Mini.png";
 import iconAtividade from "../../assets/icons/mini/Ícone Atividade Mini.png";
 import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 import { Atividade } from "@/components/atividade";
+import { FavoritoDTO } from "@/DTO/FavoritoDTO";
+import { VideoPlayer } from "@/components/videoPlayer";
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
@@ -35,11 +35,6 @@ export function Aulas() {
   const [newTitleConteudo, setNewTitleConteudo] = useState("");
   const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
   const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
-
-  const [favoritado, setFavoritado] = useState(false);
-  const handleFavoritar = () => {
-    setFavoritado(!favoritado);
-  };
 
   const getAssunto = async () => {
     try {
@@ -112,7 +107,7 @@ export function Aulas() {
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
-      <div className="w-[25%] flex flex-col">
+      <div className="w-[30%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
           {indexDesejado && (
@@ -212,31 +207,10 @@ export function Aulas() {
           </div>
         </div>
         <div className="w-full h-full flex items-start justify-center">
-          {videoAula && (
-            <div className="border-2 border-solid border-blue-600 object-cover relative">
-              <ReactPlayer
-                width="100%"
-                height="100%"
-                controls={true}
-                playing
-                loop
-                url={videoAula?.file}
-              />
-              <button
-                className="w-1/6 absolute top-4 right-4 flex flex-row items-center justify-evenly bg-white text-cinza_escuro border-2 border-solid border-blue-600 py-1 rounded-3xl"
-                onClick={handleFavoritar}
-              >
-                <div className="text-blue-600 text-xl font-bold">
-                  {favoritado ? <MdOutlineStar /> : <MdOutlineStarBorder />}
-                </div>
-                <h1 className="text-sm font-bold">Favoritar</h1>
-              </button>
-            </div>
-          )}
+          {videoAula && <VideoPlayer VideoAula={videoAula} />}
           {atividade && <Atividade id={atividade?.id} />}
         </div>
       </div>
-
       <div className="w-[30%]">
         <Tabs />
       </div>
