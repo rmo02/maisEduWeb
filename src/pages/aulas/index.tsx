@@ -21,6 +21,7 @@ import { Atividade } from "@/components/atividade";
 import { FavoritoDTO } from "@/DTO/FavoritoDTO";
 import { VideoPlayer } from "@/components/videoPlayer";
 import { Chat } from "@/components/chat";
+import socketServices from "@/util/socketServices";
 
 
 export function Aulas() {
@@ -113,6 +114,7 @@ export function Aulas() {
       setVideoAula(null);
     }
   };
+
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">

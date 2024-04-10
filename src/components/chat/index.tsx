@@ -11,17 +11,22 @@ export function Chat({ idProfessor, nomeProfessor }: any) {
     let id_professor = idProfessor;
     let id_alunoSenha = user?.id_senha;
 
-    // Ouvindo por novas mensagens
-    useEffect(() => {
-        socketServices.on("new_message", (data: any) => {
-            // Adicionando a nova mensagem à lista de mensagens
-            setMessages([...messages, { text: data.message, sender: data.sender }]);
-        });
-
-        return () => {
-            socketServices.remove("new_message");
-        };
-    }, [messages]);
+    const iniciandoSala = async () => {
+        // Selecionando a sala e obtendo mensagens anteriores
+        socketServices.emit(
+            "select_room",
+            {
+                id_connected: id_aluno,
+                id_professor,
+                id_aluno,
+                type: 'mobile'
+            },
+            (res: any) => {
+                setIdSala(res.room_id);
+                setMessages(res.messages);
+            }
+        );
+    }
 
     const sendMessage = (text: string) => {
         // Enviando a mensagem para o servidor via websocket
@@ -39,34 +44,26 @@ export function Chat({ idProfessor, nomeProfessor }: any) {
         ]
         socketServices.emit("send_message", objectMessage, (res: any) => {
             console.log('mensagem enviada', res)
+            iniciandoSala()
         });
 
     };
 
     // Inicializando sala e recebendo mensagens anteriores
     useEffect(() => {
-        // Selecionando a sala e obtendo mensagens anteriores
-        socketServices.emit(
-            "select_room",
-            {
-                id_connected: id_aluno,
-                id_professor,
-                id_aluno,
-                type: 'mobile'
-            },
-            (res: any) => {
-                setIdSala(res.room_id);
-                setMessages(res.messages);
-            }
-        );
-
+        socketServices.initializeSocket();
+        setTimeout(() => {
+            iniciandoSala();
+            console.log('chamou')
+        }, 3000);
     }, []);
 
 
     return (
         <div className="h-[30vh]">
             <div className="flex flex-col h-full bg-white w-full rounded-xl p-4 shadow-md shadow-[#4264eb86] justify-between">
-            <MessageInput onSendMessage={sendMessage} />
+                <h1 className='text-[#00B7B7] font-medium text-lg'>{nomeProfessor}</h1>
+                <MessageInput onSendMessage={sendMessage} />
                 <div className="flex flex-col gap-2 mt-2 overflow-y-auto">
                     {messages.map((message, index) => {
                         return (
@@ -74,10 +71,9 @@ export function Chat({ idProfessor, nomeProfessor }: any) {
                         );
 
                     }
-
                     )}
                 </div>
-                
+
             </div>
         </div>
     );
@@ -93,9 +89,10 @@ function Message({ text, sender, id_alunoSenha }: any) {
 
     return (
         <div className="flex w-full pb-2 border-b-2 border-slate-200">
-            <div className={`flex  ${messageClass}`}>
-                <img src="https://i.pravatar.cc/" alt="avatar" className="rounded-full w-10" />
+            <div className={`flex items-center  ${messageClass}`}>
+                <img src="https://i.pravatar.cc/" alt="avatar" className="rounded-full w-10 h-10" />
                 <div className={`p-2 ml-3 rounded-lg w-full ${bubbleClass}`}>
+                    <p className='font-medium'>{isUser === true ? 'Eu:' : "Professor:"}</p>
                     <p>{text}</p>
                 </div>
             </div>

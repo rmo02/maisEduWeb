@@ -5,11 +5,6 @@ import socketServices from "./util/socketServices";
 
 export function App() {
 
-  useEffect(() => {
-    // Inicialize o serviço de socket
-    socketServices.initializeSocket();
-  }, []);
-
 
   return (
     <AuthProvider>
