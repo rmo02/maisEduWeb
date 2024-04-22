@@ -11,14 +11,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { LembretesDTO } from "@/DTO/LembretesDTO";
 
-export function EditarLembrete({ lembrete }: { lembrete: any }) {
+type AtualizarLembretesType = () => void;
+
+export function EditarLembrete({
+  lembrete,
+  atualizarLembretes,
+}: {
+  lembrete: LembretesDTO;
+  atualizarLembretes: AtualizarLembretesType;
+}) {
   const { user } = useContext(AuthContext);
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [inicioDateTime, setInicioDateTime] = useState("");
   const [fimDateTime, setFimDateTime] = useState("");
   const [dataMasked, setDataMasked] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false); // Estado local para controlar se o diálogo está aberto ou fechado
 
   useEffect(() => {
     const getData = async () => {
@@ -31,6 +43,38 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
     };
     getData();
   }, [lembrete.id]);
+
+  const notify = (text: string, type: string) => {
+    switch (type) {
+      case "info":
+        toast.info(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      case "error":
+        toast.error(text, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      default:
+        toast(text); // Para o caso padrão, apenas exiba uma notificação padrão
+        break;
+    }
+  };
 
   async function enviarLembrete(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,28 +89,27 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
       });
       console.log(res);
       if (res.status === 201) {
-        console.log(res.status);
+        notify("Lembrete editado!", "info"); // Chamada para notificação de sucesso
+        atualizarLembretes(); // Atualiza a lista de lembretes
       }
-      document.location.reload();
-      alert("Lembrete editado!");
     } catch (error) {
-      alert("Ocorreu um erro. Tente novamente.");
+      notify("Erro ao editar lembrete. Tente novamente!", "error"); // Chamada para notificação de sucesso
       console.log("Erro ao editar lembrete. ", error);
     }
   }
 
   async function excluirLembrete(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault(); // Evita o comportamento padrão do formulário
-
     try {
       const res = await api.delete(`/lembretes/${lembrete.id}`);
-      if (res.status !== 204) {
+      if (res.status === 204) {
         console.log(res.status);
+        notify("Lembrete apagado!", "error"); // Chamada para notificação de sucesso
+        atualizarLembretes(); // Atualiza a lista de lembretes
+        setDialogOpen(false); // Fecha o diálogo
       }
-      console.log("deu certo", res.data);
-      document.location.reload();
     } catch (error) {
-      alert("Ocorreu um erro. Tente novamente.");
+      notify("Erro ao apagar lembrete. Tente novamente!", "error"); // Chamada para notificação de sucesso
       console.log("Erro ao excluir lembrete. ", error);
     }
   }
@@ -81,9 +124,17 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
 
   return (
     <div className="w-full">
-      <Dialog>
+      <ToastContainer />
+      <Dialog open={dialogOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full" variant={null} size={null}>
+          <Button
+            className="w-full"
+            variant={null}
+            size={null}
+            onClick={() => {
+              setDialogOpen(true);
+            }}
+          >
             <div className="w-full flex flex-col items-start mb-3 rounded-lg bg-[#FFFFFF] px-4">
               <p className="text-[#748FFC] text-base font-bold mb-2">
                 {truncateText(lembrete.title, 25)}
@@ -190,13 +241,15 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
                     </Button>
                   </DialogClose>
 
-                  <Button
-                    onClick={excluirLembrete}
-                    className="bg-red-500 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
-                    variant={null}
-                  >
-                    Excluir
-                  </Button>
+                  <DialogClose asChild>
+                    <Button
+                      onClick={excluirLembrete}
+                      className="bg-red-500 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
+                      variant={null}
+                    >
+                      Excluir
+                    </Button>
+                  </DialogClose>
 
                   {titleEvent.length === 0 ||
                   descriptionEvent.length === 0 ||
@@ -212,13 +265,15 @@ export function EditarLembrete({ lembrete }: { lembrete: any }) {
                       Salvar
                     </Button>
                   ) : (
-                    <Button
-                      type="submit"
-                      variant={null}
-                      className="bg-blue-600 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
-                    >
-                      Salvar
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        type="submit"
+                        variant={null}
+                        className="bg-blue-600 hover:opacity-70 rounded-lg text-white font-semibold w-1/5 h-[40px] ml-4"
+                      >
+                        Salvar
+                      </Button>
+                    </DialogClose>
                   )}
                 </div>
               </DialogFooter>

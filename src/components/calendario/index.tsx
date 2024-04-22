@@ -29,6 +29,7 @@ function classNames(...classes: (string | boolean)[]) {
 export function Calendario() {
   const { user } = useContext(AuthContext);
   const [lembretes, setLembretes] = useState<LembretesDTO[]>([]);
+
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = useState<Date>(today);
   const [currentMonth, setCurrentMonth] = useState<string>(
@@ -49,13 +50,15 @@ export function Calendario() {
     return verificaData(dataAtualFormatada, lembrete);
   });
 
-  useEffect(() => {
-    const getData = async () => {
+  const getLembretes = async () => {
+    try {
       const response = await api.get(`/lembretes`);
       setLembretes(response.data.lembretes);
-    };
-    getData();
-  }, []);
+    } catch (error) {
+      setLembretes([]);
+      throw error;
+    }
+  };
 
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
@@ -75,6 +78,14 @@ export function Calendario() {
     }
     return false;
   }
+
+  const atualizarLembretes = async () => {
+    await getLembretes();
+  };
+
+  useEffect(() => {
+    getLembretes();
+  }, []);
 
   return (
     <div className="w-full">
@@ -164,7 +175,7 @@ export function Calendario() {
         </div>
         <div className="flex flex-col items-center">
           <div className="w-full">
-            <CriarLembrete />
+            <CriarLembrete atualizarLembretes={atualizarLembretes} />
           </div>
         </div>
         <section className="w-full h-[26vh] mt-3">
@@ -173,7 +184,11 @@ export function Calendario() {
               {selectedDayLembretes.length > 0 ? (
                 selectedDayLembretes.map((lembrete) =>
                   lembrete.id_professor || lembrete.id_aluno === user?.id ? (
-                    <EditarLembrete lembrete={lembrete} key={lembrete.id} />
+                    <EditarLembrete
+                      lembrete={lembrete}
+                      atualizarLembretes={atualizarLembretes}
+                      key={lembrete.id}
+                    />
                   ) : (
                     <div className="w-full flex items-center justify-center mt-3">
                       <p>Sem lembretes</p>
