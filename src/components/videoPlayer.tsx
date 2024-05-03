@@ -22,7 +22,6 @@ export function VideoPlayer({ VideoAula }: { VideoAula: VideoAulaDTO }) {
     }
   };
 
-  console.log("favoritos: ", favoritos);
 
   //função de favoritar de desfavoritar video
   const handleFavoritar = async (idAula: string) => {
