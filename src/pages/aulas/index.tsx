@@ -20,10 +20,14 @@ import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 import { Atividade } from "@/components/atividade";
 import { FavoritoDTO } from "@/DTO/FavoritoDTO";
 import { VideoPlayer } from "@/components/videoPlayer";
+import { Chat } from "@/components/chat";
+import socketServices from "@/util/socketServices";
+
 
 export function Aulas() {
   const { user } = useContext(AuthContext);
   const { idDisc, idAssunto, numIndex } = useParams();
+
 
   const [assunto, setAssunto] = useState<AssuntoDTO[]>([]);
   const [conteudo, setConteudo] = useState<ConteudoDTO | null>();
@@ -35,6 +39,10 @@ export function Aulas() {
   const [newTitleConteudo, setNewTitleConteudo] = useState("");
   const [disciplina, setDisciplina] = useState<DisciplinaDTO>();
   const [indexDesejado, setIndexDesejado] = useState<string | undefined>();
+  const [idProfessor, setIdProfessor] = useState();
+  const [nomeProfessor, setNomeProfessor] = useState("");
+
+
 
   const getAssunto = async () => {
     try {
@@ -52,6 +60,8 @@ export function Aulas() {
       setConteudo(res.data["conteudo"]);
       setAula(res.data.conteudo["array_conteudos"]);
       setNewTitleConteudo(res.data["conteudo"].name);
+      setIdProfessor(res.data["conteudo"].created_by);
+      setNomeProfessor(res.data["conteudo"].professor);
       if (numIndex !== undefined) {
         setVideoAula(
           res.data.conteudo["array_conteudos"][Number(numIndex)].aula
@@ -105,9 +115,10 @@ export function Aulas() {
     }
   };
 
+
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
-      <div className="w-[30%] flex flex-col">
+      <div className="w-[40%] flex flex-col">
         <h1 className="text-blue-600 text-lg font-bold">Aulas</h1>
         <div className="w-full max-h-[75vh] flex flex-col bg-white p-3 rounded-xl gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb">
           {indexDesejado && (
@@ -179,7 +190,7 @@ export function Aulas() {
           )}
         </div>
       </div>
-      <div className="w-full flex flex-col items-start">
+      <div className="w-full flex flex-col items-start mb-10">
         <div className="flex items-center mb-4">
           <div className="flex flex-row">
             <h1 className="text-blue-600 text-xl font-medium mb-2 hover:underline">
@@ -206,12 +217,20 @@ export function Aulas() {
             </h1>
           </div>
         </div>
+
         <div className="w-full h-full flex items-start justify-center">
           {videoAula && <VideoPlayer VideoAula={videoAula} />}
           {atividade && <Atividade id={atividade?.id} />}
         </div>
+
+          {/* chat */}
+          <div className="w-full mt-5">
+            <Chat idProfessor={idProfessor} nomeProfessor={nomeProfessor} />
+          </div>
+
+
       </div>
-      <div className="w-[30%]">
+      <div className="w-[40%]">
         <Tabs />
       </div>
     </div>

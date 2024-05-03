@@ -48,7 +48,6 @@ export function Home() {
     getAulasFavoritadas();
   }, []);
 
-  console.log(favoritos);
 
   return (
     <div className="w-full h-full flex px-4 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-4 gap-6">
@@ -138,6 +137,7 @@ export function Home() {
               })}
             </div>
           </div>
+
           <div className="flex flex-col bg-white w-full sm:w-1/2 md:w-3/5 lg:w-3/5 rounded-xl p-4 shadow-md shadow-[#4264eb86]">
             <div className="flex justify-between items-center">
               <h1 className="text-[#00B7B7] font-medium text-xl">Chat</h1>
@@ -164,6 +164,7 @@ export function Home() {
               </div>
             </div>
           </div>
+          
         </div>
       </div>
 
