@@ -28,6 +28,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.4.0",
     "lucide-react": "^0.331.0",
+    "pnpm": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.1",
@@ -35,8 +36,8 @@
     "react-modal": "^3.16.1",
     "react-player": "^2.15.1",
     "react-router-dom": "^6.15.0",
-    "socket.io-client": "^4.7.5",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.7.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"

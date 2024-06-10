@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { AuthContext } from "@/context/AuthContext";
 import { Aulas } from "@/pages/aulas";
-import { Chat } from "@/pages/chat";
+import { Conversas } from "@/pages/conversas";
 import { Assunto } from "@/pages/assunto";
 import { Disciplinas } from "@/pages/disciplinas";
 import { Home } from "@/pages/home";
@@ -34,7 +34,7 @@ function RotasProtegidas() {
           element={<Aulas />}
         />
         <Route path="/progresso" element={<Progresso />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat" element={<Conversas />} />
       </Routes>
     </>
   );
