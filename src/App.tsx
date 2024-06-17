@@ -5,6 +5,7 @@ import socketServices from "./util/socketServices";
 
 export function App() {
 
+  // PROJETO ATUALIZADO
 
   return (
     <AuthProvider>

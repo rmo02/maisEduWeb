@@ -141,9 +141,11 @@ export function Home() {
           <div className="flex flex-col bg-white w-full sm:w-1/2 md:w-3/5 lg:w-3/5 rounded-xl p-4 shadow-md shadow-[#4264eb86]">
             <div className="flex justify-between items-center">
               <h1 className="text-[#00B7B7] font-medium text-xl">Chat</h1>
+              <a href={"/chat"}>
               <span className="text-zinc-600 text-sm underline cursor-pointer">
                 Chat completo
               </span>
+              </a>
             </div>
             <div className="flex gap-4 mt-4 border-b border-slate-200">
               <img src={Fisica} className="w-12 h-12 rounded-full" />

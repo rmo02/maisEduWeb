@@ -30,6 +30,10 @@ function RotasProtegidas() {
           element={<Conteudo />}
         />
         <Route
+          path="/chat"
+          element={<Conversas />}
+        />
+        <Route
           path="/disciplinas/:idDisc/assunto/:idAssunto/conteudo/aula/:numIndex"
           element={<Aulas />}
         />

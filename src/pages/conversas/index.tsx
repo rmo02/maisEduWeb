@@ -3,6 +3,8 @@ import { Calendario } from "@/components/calendario";
 export function Conversas() {
   return (
     <div className="flex flex-row w-full px-5 mt-4 pt-10 justify-between space-x-2">
+
+      {/* barra com todas as conversas */}
       <div className="bg-white p-2 rounded-md shadow-2xl w-[20%]">
         <div className="overflow-y-auto space-y-1">
           {/* mensagens */}
@@ -85,7 +87,7 @@ export function Conversas() {
         </div>
       </div>
 
-      <div >
+      <div>
         <Calendario />
       </div>
     </div>
