@@ -7,6 +7,28 @@ import { useParams } from "react-router-dom";
 import { Tabs } from "@/components/tab";
 import { DisciplinaDTO } from "@/DTO/DisciplinasDTO";
 
+export type type = {
+  name: string
+}
+
+export type Cont = {
+  status: boolean
+}
+
+
+function compareConteudos(a:type, b:type) {
+  const nameA = a.name.toUpperCase();
+  const nameB = b.name.toUpperCase();
+
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  return 0;
+}
+
 export function Assunto() {
   const { user } = useContext(AuthContext);
   const { idDisc } = useParams();
@@ -16,7 +38,15 @@ export function Assunto() {
   const getAssunto = async () => {
     try {
       const res = await api.get(`/conteudosAluno/${user?.id}/${idDisc}`);
-      setAssunto(res.data.conteudo["conteudo"]);
+      const conteudosFiltrados = res.data["conteudo"].conteudo.filter(
+        (cont:Cont) => cont.status === true
+      );
+
+      // Ordenar os conteúdos pelo campo "name"
+      conteudosFiltrados.sort(compareConteudos);
+
+      setAssunto(conteudosFiltrados);
+
     } catch (error) {
       console.log(error);
       throw error;
