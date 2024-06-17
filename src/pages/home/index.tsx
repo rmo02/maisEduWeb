@@ -122,7 +122,6 @@ export function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5">
               {/* Limitando as últimas aulas em 4 */}
               {ultimasAulas.slice(0, 4).map((item, index) => {
-                console.log('ultimas aulas',item)
                 return (
                   <div key={index} className="col-span-1 cursor-pointer">
                     <a
